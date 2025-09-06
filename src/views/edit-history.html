@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrumble</title>
+    <link rel="icon" href="tab-logo.png" type="png">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+        @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+
+        body {
+            font-family: 'Futura', sans-serif; 
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #6ec6e6;
+            padding-left: 5rem;
+            padding-right: 5rem;
+            padding-top: 1.5rem;
+        }
+
+        header {
+            font-family: "Bukhari Script", cursive; 
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #6ec6e6;
+            padding-bottom: 1rem;
+            position: relative;
+        }
+
+        nav {
+            display: flex;
+            gap: 5.0rem;
+        }
+
+        nav a {
+            font-family: 'Futura', sans-serif;
+            color: #6f85a6;
+            text-decoration: none;
+            font-size: 23px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #6ec6e6;
+        }
+
+        .user-logo {
+            width: 50px;
+            height: 50px;
+            background-image: url('user-icon.png'); 
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: none;
+            transition: color 0.3s;
+        }
+
+        .user-logo:hover {
+            color: #6ec6e6;
+        }
+
+        hr {
+            height: 4px;
+            background-color: #6ec6e6;
+            border-color: #6ec6e6;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .content {
+            padding: 2rem;
+            text-align: left;
+        }
+
+        h1 {
+            
+            margin: 0;
+            color: #40556e;
+        }
+
+        .editing-history {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .editing-history th,
+        .editing-history td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .editing-history th {
+            font-weight: bold;
+            color: #666;
+            padding: 5px;
+        }
+
+        .editing-history tbody tr {
+            background-color: #e8f6fb;
+            border-radius: 10px;
+        }
+
+        .editing-history tbody td {
+            border: none;
+            color: #508dbc;
+            font-weight: bold;
+            padding: 10px;
+            margin: auto;
+        }
+
+        .editing-history tbody td:first-child {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        .editing-history tbody td:last-child {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+
+        }
+
+        .dot-button {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: #333;
+            margin: 2px;
+        }
+        .logout-button{
+            background-color: #66ccff;
+            color: #fff;
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            margin-left: 150px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover{
+            background-color: #56a6c4;
+        }
+
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body onload="checkAuthentication()">
+    <header>
+        <div class="logo">Scrumble</div>
+        <nav>
+            <a href="overview.html" class = "current">Product Backlog</a>
+            <a href="sprint_board.html">Sprint Board</a>
+        </nav>
+        <div class="logout-button" onclick="logout()">Log out</div>
+        <div class="user-logo" onclick="redirectToProfile()"></div>
+    </header>
+    <hr>
+  <div class="content">
+    <h1>Editing History</h1>
+    <table class="editing-history">
+      <thead>
+        <tr>
+          <th>Team Member</th>
+          <th>Edited Date</th>
+          <th>Edited Time</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="history-table-body">
+        <!-- JavaScript will populate this section -->
+      </tbody>
+    </table>
+  </div>
+</body>
+
+    <script>
+        function checkAuthentication() {
+            // Retrieve currentMember from localStorage
+            const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            // If currentMember does not exist or memberId is -1, redirect to index.html
+            if (!currentMember || currentMember.memberId === -1) {
+                window.location.href = 'index.html'; // Redirect to login page
+            }
+        }
+
+        function logout() {
+            // Get the currentMember from localStorage
+            let currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            if (currentMember) {
+                // Update the role and memberId
+                currentMember.role = 'None';
+                currentMember.memberId = -1;
+
+                // Save the updated currentMember back to localStorage
+                localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+                // Redirect to the index.html page (or login page)
+                window.location.href = 'index.html';
+            } else {
+                console.error('No currentMember found in localStorage.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            checkAuthentication();
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            const urlParams = new URLSearchParams(window.location.search);
+            const taskId = urlParams.get('taskId');
+            const task = tasks.find(t => t.id === taskId);
+            const historyTableBody = document.getElementById('history-table-body');
+
+            // Function to format the edited time
+            function formatEditedTime(timestamp) {
+                const date = new Date(timestamp);
+                const hours = date.getHours();
+                const minutes = date.getMinutes();
+                const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+                return formattedTime;
+            }
+
+            // Function to format the edited date
+            function formatEditedDate(timestamp) {
+                const date = new Date(timestamp);
+                const year = date.getFullYear();
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const day = date.getDate().toString().padStart(2, '0');
+                const formattedDate = `${month}/${day}/${year}`;
+                return formattedDate;
+            }
+
+            // Function to populate the editing history table
+            function populateEditingHistory() {
+                historyTableBody.innerHTML = ''; // Clear existing table rows
+
+                const editTime = task.editTime
+                editTime.forEach((time, timeIndex) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${task.assignee}</td>
+                        <td>${formatEditedDate(time)}</td>
+                        <td>${formatEditedTime(time)}</td>
+                    `;
+
+
+                    historyTableBody.appendChild(row);
+                });
+            }
+
+            // Call the function to populate the editing history table
+            populateEditingHistory();
+        });
+
+        function redirectToProfile() {
+            const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+            if (currentMember && currentMember.role) {
+                if (currentMember.role === 'member') {
+                    window.location.href = 'member-profile.html'; // Redirect to member profile
+                } else if (currentMember.role === 'admin') {
+                    window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+                } else {
+                    console.error('Invalid role found for the current member.');
+                }
+            } else {
+                console.error('No current member data found.');
+            }
+        }
+    </script>
+</body>
+</html>

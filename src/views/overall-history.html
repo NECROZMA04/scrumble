@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrumble</title>
+    <link rel="icon" href="tab-logo.png" type="png">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+        @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+
+        body {
+            font-family: 'Futura', sans-serif; 
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #6ec6e6;
+            padding-left: 5rem;
+            padding-right: 5rem;
+            padding-top: 1.5rem;
+            min-height: 100%;
+            overflow: auto;
+        }
+
+        body::-webkit-scrollbar {
+            width: 0; /* Remove scrollbar width */
+            height: 0; /* Remove scrollbar height for horizontal scroll */
+        }
+
+        header {
+            font-family: "Bukhari Script", cursive; 
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #6ec6e6;
+            padding-bottom: 1rem;
+            position: relative;
+        }
+
+        nav {
+            display: flex;
+            gap: 5.0rem;
+        }
+
+        nav a {
+            font-family: 'Futura', sans-serif;
+            color: #6f85a6;
+            text-decoration: none;
+            font-size: 23px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #6ec6e6;
+        }
+
+        .user-logo {
+            width: 50px;
+            height: 50px;
+            background-image: url('user-icon.png'); 
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s,transform 0.2s ease;
+        }
+
+        .user-logo:hover {
+            color: #6ec6e6;
+            transform: scale(1.05);
+        }
+
+        hr {
+            height: 4px;
+            background-color: #6ec6e6;
+            border-color: #6ec6e6;
+            border: none;
+            border-radius: 20px;
+        }
+
+
+        
+        .add-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            padding: 20px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .add-buttons button {
+            background-color: white;
+            border: 1px solid #dcdcdc;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .add-buttons button:hover {
+            transform: scale(1.02);
+        }
+
+        .add-buttons .plus-sign {
+            background-color: #6ec6e6;
+            color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            transition: background-color 1s ease;
+        }
+
+        .add-buttons .plus-sign:hover {
+            background-color: #4f8fb5;
+        }
+
+
+
+        
+        .heading {
+            font-family: 'Futura', sans-serif;
+            color: #6ec6e6;
+            text-align: left;
+            font-size: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
+
+        .no-task-message {
+            align-items: center; /* Center vertically */
+            width: 400px;
+            background-color: #e8f6fb; 
+            color: #508dbc; 
+            margin: auto;
+            border-radius: 10px;
+            text-align: center; 
+            font-weight: bold;
+        }
+
+        .heading h1{
+            color: #40556e;
+            font-size: 35px;
+            padding: 0px;
+            margin-top: 2px;
+        }
+
+        
+        nav a.current{
+            color: #2e587d;
+        }
+
+        .back-button {
+            position: fixed; /* Fixed positioning to place it relative to the viewport */
+            bottom: 50px; /* Distance from the bottom of the viewport */
+            right: 40px; /* Distance from the right of the viewport */
+            padding: 10px 20px; /* Padding for button size */
+            font-size: 16px; /* Font size */
+            font-family: 'Futura', sans-serif; /* Font style */
+            background-color: #7bd2f1; /* Button background color */
+            color: white; /* Text color */
+            border: none; /* Remove border */
+            border-radius: 30px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s ease, transform 0.2s; /* Smooth transitions */
+        }
+
+        .back-button:hover {
+            background-color: #508dbc; /* Change color on hover */
+            transform: translateY(-2px); /* Slight lift on hover */
+        }
+
+        .timeline-container {
+            padding: 10px;
+            margin-bottom: 200px;
+        }
+        .timeline h3 {
+            font-size: 24px;
+            color: #2e587d;
+        }
+
+        .timeline li {
+            content: "🕒";
+            position: relative;
+            padding: 20px;
+            border-left: 10px solid #508dbc;
+            margin-bottom: 10px;
+            background: #e8f6fb;
+            border-radius: 5px;
+            transition: transform 0.3s ease-in-out;
+            margin: 15px;
+        }
+
+        .timeline li:hover {
+            transform:translateX(5px);
+        }
+
+        .timeline li::before {
+            margin-top: 30px;
+            position: absolute;
+            left: -30px;
+            top: 20px;
+            font-size: 20px;
+        }
+
+        .timestamp {
+            font-weight: bold;
+            color: #2e587d;
+        }
+
+        .description {
+            margin-bottom: 5px;
+            background-color: #f9fdff;
+            max-width: 70px;
+            border-radius: 15px;
+            padding: 3px 10px;
+            font-size: 14px;
+            color: #508dbc;
+            border: 2px solid #508dbc;
+            font-weight: bolder;
+        }
+        .logout-button{
+            background-color: #66ccff;
+            color: #fff;
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            margin-left: 150px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover{
+            background-color: #56a6c4;
+        }
+
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body onload="checkAuthentication()">
+    <header>
+        <div class="logo">Scrumble</div>
+        <nav>
+            <a href="overview.html">Product Backlog</a>
+            <a href="sprint_board.html">Sprint Board</a>
+        </nav>
+        <div class="logout-button" onclick="logout()">Log out</div>
+        <div class="user-logo" onclick="redirectToProfile()"></div>
+    </header>
+    <hr>
+    
+
+    <div class="heading">
+        <h1>Editing History</h1>
+    </div>
+
+    <div class="timeline-container">
+        <ul id="editTimeline" class="timeline"></ul>
+    </div>
+
+    <button class="back-button" onclick="window.history.back()">Back</button>
+    
+    <script>
+        function checkAuthentication() {
+            // Retrieve currentMember from localStorage
+            const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            // If currentMember does not exist or memberId is -1, redirect to index.html
+            if (!currentMember || currentMember.memberId === -1) {
+                window.location.href = 'index.html'; // Redirect to login page
+            }
+        }
+
+        function logout() {
+            // Get the currentMember from localStorage
+            let currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            if (currentMember) {
+                // Update the role and memberId
+                currentMember.role = 'None';
+                currentMember.memberId = -1;
+
+                // Save the updated currentMember back to localStorage
+                localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+                // Redirect to the index.html page (or login page)
+                window.location.href = 'index.html';
+            } else {
+                console.error('No currentMember found in localStorage.');
+            }
+        }
+        function redirectToProfile() {
+            const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+            if (currentMember && currentMember.role) {
+                if (currentMember.role === 'member') {
+                    window.location.href = 'member-profile.html'; // Redirect to member profile
+                } else if (currentMember.role === 'admin') {
+                    window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+                } else {
+                    console.error('Invalid role found for the current member.');
+                }
+            } else {
+                console.error('No current member data found.');
+            }
+        }
+
+        // Function to format the timestamp into a readable date and time separately
+        function formatTimestamp(timestamp) {
+            const date = new Date(timestamp);
+            const dateStr = date.toLocaleDateString(); // Format as date only
+            const timeStr = date.toLocaleTimeString(); // Format as time only
+            return { date: dateStr, time: timeStr };   // Return both parts separately
+        }
+
+        // Function to render the edit timeline for all tasks
+        function renderTimeline() {
+            const timeline = document.getElementById('editTimeline');
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+            // Clear the timeline before adding new entries
+            timeline.innerHTML = '';
+
+            // Check if there are any tasks
+            if (tasks.length === 0) {
+                timeline.innerHTML = '<p>No tasks found.</p>';
+                return;
+            }
+
+            // Loop through each task and display its edit history
+            tasks.forEach((task, taskIndex) => {
+                // Create a task header to identify which task the edits belong to
+                const taskHeader = document.createElement('h3');
+                taskHeader.textContent = `Task ${taskIndex + 1}: ${task.title || 'Untitled Task'}`;
+                timeline.appendChild(taskHeader);
+
+                // Check if the task has edit history
+                if (!task.editTime || task.editTime.length === 0) {
+                    const noEditsItem = document.createElement('li');
+                    noEditsItem.textContent = 'No edits recorded yet.';
+                    timeline.appendChild(noEditsItem);
+                    return;
+                }
+
+                // Create a list item for each timestamp in the task's edit history
+                task.editTime.forEach((time, index) => {
+                    const { date, time: formattedTime } = formatTimestamp(time); // Get date and time separately
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <div class="description">Edit #${index + 1}</div>
+                        <div class="timestamp">
+                            <span>Team member: ${task.assignee || 'Unassigned'}</span><br>
+                            <span>Date: ${date}</span><br>
+                            <span>Time: ${formattedTime}</span>
+                        </div>
+                    `;
+                    timeline.appendChild(listItem);
+                });
+            });
+        }
+
+        // Call the function to display the timeline on page load
+        document.addEventListener('DOMContentLoaded', function(){
+            checkAuthentication();
+            renderTimeline();
+        });
+
+    </script>
+</body>
+</html>

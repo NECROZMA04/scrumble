@@ -1,0 +1,8 @@
+# Ignore the archive directory
+archive/
+
+# Ignore VS Code settings
+.vscode/
+
+# Ignore macOS specific files
+.DS_Store

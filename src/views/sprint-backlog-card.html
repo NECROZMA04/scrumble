@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrumble</title>
+    <link rel="icon" href="tab-logo.png" type="png">
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+        @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+
+        body {
+            font-family: 'Futura', sans-serif; 
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #6ec6e6;
+            padding-left: 5rem;
+            padding-right: 5rem;
+            padding-top: 1.5rem;
+        }
+
+        body::-webkit-scrollbar {
+            width: 0; /* Remove scrollbar width */
+            height: 0; /* Remove scrollbar height for horizontal scroll */
+        }
+
+        header {
+            font-family: "Bukhari Script", cursive; 
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #6ec6e6;
+            padding-bottom: 1rem;
+            position: relative;
+        }
+
+        nav {
+            display: flex;
+            gap: 5.0rem;
+        }
+
+        nav a {
+            font-family: 'Futura', sans-serif;
+            color: #6f85a6;
+            text-decoration: none;
+            font-size: 23px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #6ec6e6;
+        }
+
+        .user-logo {
+            width: 50px;
+            height: 50px;
+            background-image: url('user-icon.png'); 
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: none;
+            transition: color 0.3s;
+        }
+
+        .user-logo:hover {
+            color: #6ec6e6;
+        }
+
+        hr {
+            height: 4px;
+            background-color: #6ec6e6;
+            border-color: #6ec6e6;
+            border: none;
+            border-radius: 20px;
+        }
+
+        h2{
+            color: #40556e;
+            font-size: 30px;
+            padding: 5px;
+            margin-top: 40px;
+            margin-bottom: 5px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            padding: 25px;
+            justify-content: center;
+        }
+
+        .card {
+            background: #e8f6fb;
+            border-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 30%;
+            height: 540px;
+            text-align: left;
+            position: relative;
+        }
+
+        .card p {
+            margin: 10px 0;
+            color: #508dbc;
+            padding-left: 10px;
+            user-select: none;
+        }
+
+        .small-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: auto;
+            font-weight: bold;
+            background: #e8f6fb;
+            border: 3px solid #6ec6e6;
+            border-radius: 20px;
+            padding: 0 5px;
+            width: 95%;
+        }
+
+        .small-box p {
+            color: #508dbc;
+            text-align: center;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: #40556e;
+            position: relative;
+        }
+
+        .menu-btn:hover {
+            color: #6ec6e6;
+        }
+
+        .show {
+            display: block;
+        }
+
+        
+
+        .card {
+            border: 1px solid #ddd;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            overflow: visible; /* Ensure that content isn't clipped */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            min-height: 500px;
+            height: fit-content;
+        }
+
+        .task-container {
+            width: 100%;
+            padding: 10px;
+            flex-grow: 1;
+            overflow: visible;
+        }
+
+        .task-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .task-card h3 {
+            margin: 0 0 5px 0;
+            color: #40556e;
+        }
+
+        .task-item {
+            position: relative;
+            border: 4px solid #a0c6e6;
+            border-radius: 20px;
+            background-color: #a0c6e6;
+            text-align: left;
+            color: #40556e;
+            transition: background-color 0.3s ease, border 0.3s ease, transform 0.3s ease;
+            max-height: fit-content;
+            display: flex;
+            flex-direction: column;
+            margin-top: 18px;
+            cursor: grab;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2e587d; /* Dark blue text */
+            margin: 5px;
+            margin-left: 10px;
+            padding-right: 50px;
+            max-height: fit-content;
+            display: flex;
+            word-break: break-word; /* Ensures words break properly to the next line */
+            white-space: normal;
+        }
+
+        .card-content {
+            background-color: #ffffff; /* White background for the content */
+            padding: 5px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+            min-height: 50px;
+        }
+
+        .tag-priority {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+        }
+
+        .tag {
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-left: 10px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            gap: 5px;
+            font-size: 12px;
+            margin-left: 20px;
+            margin-bottom: 5px;
+            justify-content: flex-start;
+            max-width: 200px;
+        }
+
+        .tags-container span{
+            padding: 5px;
+            margin-top: 11px;
+            border-radius: 20px;
+            width: 80px;
+            text-align: center;
+        }
+
+        /* Tag styles */
+        .tag-front-end {
+            background-color: #ffd561; /* Light orange */
+            color: #fff;
+        }
+
+        .tag-back-end {
+            background-color: #66ccff; /* Light blue */
+            color: #fff;
+        }
+
+        .tag-ui {
+            background-color: #ff99cc; /* Light pink */
+            color: #fff;
+        }
+
+        .tag-ux {
+            background-color: #cc99ff; /* Light purple */
+            color: #fff;
+        }
+
+        .tag-database {
+            background-color: #66e91b; /* Lavender */
+            color: #ffffff;
+        }
+
+        .tag-api {
+            background-color: #ff5757; /* Light green */
+            color: #fff;
+        }
+
+        .tag-framework {
+            background-color: #ff914d; /* Peach */
+            color: #fff;
+        }
+
+        .tag-testing {
+            background-color: #5271ff; /* Light red */
+            color: #fff;
+        }
+
+        .tag-default{
+            background-color: #a9acad; /* Light red */
+            color: #fff;
+        }
+
+        .story-points {
+            background-color: #6ec6e6; /* Light blue background */
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+
+        #task-list{
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            gap: 20px;
+            max-width: 100%;
+            justify-content: flex-start;
+        }
+
+        .task-item{
+            margin-left: 10px;
+            font-size: 20px;
+            color: #40556e;
+            flex-wrap: wrap; /* Allows the text to wrap within the element */
+            white-space: normal; /* Allows text to break and wrap normally */
+            overflow-wrap: break-word; /* Ensures long words break to prevent overflow */
+            word-wrap: break-word; 
+        }
+
+        .priority {
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .title{
+            display: flex;
+            flex-direction: row;
+        }
+
+        .title p {
+            color: #9fa8b4;
+            font-size: 13px;
+            margin-top: 55px;
+            font-family:Arial, Helvetica, sans-serif;
+            font-weight: 700;
+            margin-left: 10px;
+            background-color: #e9eff1;
+            padding: 10px;
+            border-radius: 20px;
+        }
+
+        .list{
+            width: 25px;
+            height: 4px;
+            background-color: #508dbc;
+            margin: 3px 0;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .list-btn{
+            position: absolute;
+            top: 185px;
+            right: 130px;
+            background-color: #e8f6fb;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .list-btn:hover{
+            background-color: #d6eaf1;
+        }
+
+        .title button.back-btn{
+            position: absolute;
+            top: 185px;
+            right: 190px;
+            background-color: #e9edee;
+            border: none;
+            color: #666f75;
+            font-size: 15px;
+            font-weight: bold;
+            padding: 10px;
+            width: 80px;
+            border-radius: 10px;
+            height: 45px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .title button.back-btn:hover{
+            background-color: #ff6262;
+            color: #ffffff;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .drag-over {
+            border: 2px dashed #6ec6e6; /* Change border style on drag over */
+        }
+
+        .popup {
+            color: #333;
+            position: fixed;
+            width: 500px;
+            font-size: 30px;
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);;
+            background-color: #ffffff;
+            border: 2px solid #6ec6e6;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000; /* Make sure it is above other content */
+            text-align: center;
+            opacity: 0; /* Start hidden */
+            transition: opacity 0.5s ease; /* Smooth transition */
+            user-select: none;
+        }
+
+        .popup.show {
+            opacity: 1; /* Fully visible */
+            animation: pop-in 0.5s forwards; /* Animation for appearing */
+        }
+
+        @keyframes pop-in {
+            0% {
+                transform: translate(-50%, -60%); /* Start a bit higher */
+                opacity: 0; /* Start hidden */
+            }
+            100% {
+                transform: translate(-50%, -50%); /* Move to center */
+                opacity: 1; /* Fully visible */
+            }
+        }
+
+        .popup.hide {
+            animation: pop-out 0.5s forwards; /* Animation for disappearing */
+        }
+
+        @keyframes pop-out {
+            0% {
+                opacity: 1; /* Fully visible */
+            }
+            100% {
+                opacity: 0; /* Fade out */
+                transform: translate(-50%, -60%); /* Move a bit higher */
+            }
+        }
+
+        /* Custom dropdown container */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Button to toggle the dropdown */
+        .dropdown-button {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            margin-bottom: 0;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 14px;
+            border-radius: 10px;
+            margin-top: 40px;
+            min-height: 40px;
+            border: 2px solid #6ec6e6;
+            background-color: #e8f6fb;
+            color: #2e587d;
+        }
+
+        /* Dropdown content (hidden by default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 150px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            z-index: 1;
+            font-size: 15px;
+        }
+
+        /* Show the dropdown on button click */
+        .dropdown-content label {
+            display: block;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        /* Toggle visibility */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .filter-sort {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+            margin-top: 10px;
+            padding-right: 30px;
+            
+        }
+
+        .filter-sort select {
+            padding: 5px;
+            font-size: 14px;
+            border-radius: 10px;
+            border: 2px solid #6ec6e6;
+            background-color: #e8f6fb;
+            cursor: pointer;
+            color: #2e587d;
+            margin-top: 40px;
+            min-height: 40px;
+        }
+
+        .filter-sort select option {
+            padding: 8px 12px;
+            color: #2e587d;
+            background-color: #e8f6fb;
+            transition: background-color 0.3s;
+        }
+
+        .filter-sort select option:hover {
+            background-color: #93dbff !important;
+        }
+        .logout-button{
+            background-color: #66ccff;
+            color: #fff;
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            margin-left: 150px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover{
+            background-color: #56a6c4;
+        }
+
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body onload="checkAuthentication()">
+    <header>
+        <div class="logo">Scrumble</div>
+        <nav>
+            <a href="overview.html" >Product Backlog</a>
+            <a href="sprint_board.html">Sprint Board</a>
+        </nav>
+        <div class="logout-button" onclick="logout()">Log out</div>
+        <div class="user-logo" onclick="redirectToProfile()"></div>
+    </header>
+    <hr>
+    <div id="popup" class="popup hidden">
+        <p>✨Keep Going!✨</p>
+    </div>
+    <div class="title">
+        <h2>Sprint Backlog</h2>
+        <div id="sprint-name"></div>
+    </div>
+    <div>
+    <div class="filter-sort">
+        <select id="sortOptions">
+            <option class="select-option" value="all">Sort by All</option>
+            <option class="select-option" value="priorityHighLow">Sort by Low to High Priority</option>
+            <option class="select-option" value="priorityLowHigh">Sort by High to Low Priority</option>
+            <option class="select-option" value="oldest">Sort by Oldest to Newest</option>
+            <option class="select-option" value="newest">Sort by Newest to Oldest</option>
+        </select>       
+        <div class="dropdown">
+            <button class="dropdown-button">Filter by Tags</button>
+            <div class="dropdown-content" id="tagDropdown">
+                <label><input type="checkbox" value="front-end"> Front-End</label>
+                <label><input type="checkbox" value="back-end"> Back-End</label>
+                <label><input type="checkbox" value="ui"> UI</label>
+                <label><input type="checkbox" value="ux"> UX</label>
+                <label><input type="checkbox" value="database"> Database</label>
+                <label><input type="checkbox" value="api"> API</label>
+                <label><input type="checkbox" value="framework"> Framework</label>
+                <label><input type="checkbox" value="testing"> Testing</label>
+            </div>
+        </div>     
+    </div>    
+    <div class="title">
+        <div class="list-btn" id="list-btn">
+            <div class="list"></div>
+            <div class="list"></div>
+            <div class="list"></div>
+        </div>
+        <button class="back-btn" onclick="window.location.href ='sprint_board.html'">Back</button>
+    </div>
+</div>
+
+    <div class="container">
+        <div class="card" id="not-started" ondrop="drop(event, 'Not-Started')" ondragover="allowDrop(event)">
+            <div class="small-box">
+                <p>Not Started</p>
+                <div class="dropdown">
+                    <!-- Dropdown for sorting/filtering (unchanged) -->
+                </div>
+            </div>
+            <div class="task-container" id="not-started-tasks" >
+                <!-- Not Started tasks will be inserted here -->
+            </div>
+        </div>
+
+        <div class="card" id="in-progress" ondrop="drop(event, 'In-progress')" ondragover="allowDrop(event)">
+            <div class="small-box">
+                <p>In Progress</p>
+                <div class="dropdown">
+                    <!-- Dropdown for sorting/filtering (unchanged) -->
+                </div>
+            </div>
+            <div class="task-container" id="in-progress-tasks" >
+                <!-- In Progress tasks will be inserted here -->
+            </div>
+        </div>
+
+        <div class="card" id="completed" ondrop="drop(event, 'Completed')" ondragover="allowDrop(event)">
+            <div class="small-box">
+                <p>Completed</p>
+                <div class="dropdown">
+                    <!-- Dropdown for sorting/filtering (unchanged) -->
+                </div>
+            </div>
+            <div class="task-container" id="completed-tasks" >
+                <!-- Completed tasks will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkAuthentication() {
+            // Retrieve currentMember from localStorage
+            const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            // If currentMember does not exist or memberId is -1, redirect to index.html
+            if (!currentMember || currentMember.memberId === -1) {
+                window.location.href = 'index.html'; // Redirect to login page
+            }
+        }
+
+        function logout() {
+            // Get the currentMember from localStorage
+            let currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            if (currentMember) {
+                // Update the role and memberId
+                currentMember.role = 'None';
+                currentMember.memberId = -1;
+
+                // Save the updated currentMember back to localStorage
+                localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+                // Redirect to the index.html page (or login page)
+                window.location.href = 'index.html';
+            } else {
+                console.error('No currentMember found in localStorage.');
+            }
+        }
+
+        const jsConfetti = new JSConfetti();
+
+        // Get sprintId from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const sprintId = urlParams.get('sprintId');
+
+        // Retrieve sprints from localStorage
+        const sprints = JSON.parse(localStorage.getItem('sprints')) || [];
+        // Find the specific sprint by ID
+        const sprint = sprints.find(s => s.id === sprintId);
+        let tempTasks = sprint.tasks || [];
+
+        // Display sprint name
+        const sprintName = document.getElementById('sprint-name');
+        const name = document.createElement('p');
+        name.textContent = `Sprint Name: ${sprint?.name || 'Sprint Not Found'}`;
+        sprintName.appendChild(name);
+
+        // Main function to display tasks
+        function displayTasks(tasksToShow = null) {
+            const notStartedContainer = document.getElementById('not-started-tasks');
+            const inProgressContainer = document.getElementById('in-progress-tasks');
+            const completedContainer = document.getElementById('completed-tasks');
+
+            // Clear existing tasks in each container before re-rendering
+            notStartedContainer.innerHTML = '';
+            inProgressContainer.innerHTML = '';
+            completedContainer.innerHTML = '';
+
+            // If no tasks are passed in, use sprint tasks from localStorage
+            const allTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            const sprintTasks = sprint?.tasks.map(sprintTask => 
+                allTasks.find(task => task.id === sprintTask.id)) || [];
+
+            const tasks = tasksToShow || sprintTasks;
+
+            // Loop through the tasks and append them to the respective containers
+            tasks.forEach(task => {
+                if (task) {
+                    const taskItem = createTaskElement(task);
+                    switch (task.status) {
+                        case 'Not-Started':
+                            notStartedContainer.appendChild(taskItem);
+                            break;
+                        case 'In-progress':
+                            inProgressContainer.appendChild(taskItem);
+                            break;
+                        case 'Completed':
+                            completedContainer.appendChild(taskItem);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
+            updateRemainingStoryPoints();
+        }
+
+        function updateRemainingStoryPoints() {
+            const allTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            const sprintTasks = sprint?.tasks.map(sprintTask => 
+                allTasks.find(task => task.id === sprintTask.id)) || [];
+
+            // Calculate remaining story points (only tasks not marked as "Completed")
+            let remainingPoints = sprintTasks
+                .filter(task => task.status !== 'Completed')
+                .reduce((sum, task) => sum + (Number(task.storyPoints) || 0), 0);
+
+            // Get the current date
+            const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+
+            // Update the sprint's remainingPoints array
+            sprint.remainingPoints = sprint.remainingPoints || []; // Initialize if it doesn't exist
+
+            // Check if the entry for the current date already exists
+            const existingEntry = sprint.remainingPoints.find(entry => entry.date === currentDate);
+
+            if (existingEntry) {
+                // If the entry exists, update it
+                existingEntry.remainingPoints = remainingPoints;
+            } else {
+                // Otherwise, push a new entry
+                sprint.remainingPoints.push({
+                    remainingPoints: remainingPoints,
+                    date: currentDate
+                });
+            }
+
+            // Save updated sprint back to localStorage
+            const updatedSprints = sprints.map(s => s.id === sprintId ? sprint : s);
+            console.log(updatedSprints)
+            localStorage.setItem('sprints', JSON.stringify(updatedSprints));
+        }
+
+
+        // Sort tasks based on selected option
+        function sortTasks(tasksToSort) {
+            const sortOption = document.getElementById('sortOptions').value;
+
+            // Sort based on the selected option
+            tasksToSort.sort((a, b) => {
+                switch (sortOption) {
+                    case 'priorityHighLow':
+                        return getPriorityValue(b.priority) - getPriorityValue(a.priority);
+                    case 'priorityLowHigh':
+                        return getPriorityValue(a.priority) - getPriorityValue(b.priority);
+                    case 'oldest':
+                        return new Date(a.createdTime) - new Date(b.createdTime);
+                    case 'newest':
+                        return new Date(b.createdTime) - new Date(a.createdTime);
+                    default:
+                        return 0; // No sorting
+                }
+            });
+
+            // Update displayed tasks
+            displayTasks(tasksToSort);
+        }
+
+        // Filter tasks based on selected tags
+        function filterTasks() {
+            const checkboxes = document.querySelectorAll('#tagDropdown input[type="checkbox"]');
+            const selectedTags = Array.from(checkboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value.toLowerCase());
+
+            
+            
+            const allTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            const sprintTasks = sprint?.tasks.map(sprintTask => 
+                allTasks.find(task => task.id === sprintTask.id)) || [];
+
+            if (selectedTags.length === 0) {
+                return sprintTasks
+            }
+            // Filter tasks based on selected tags
+            const filteredTasks = sprintTasks.filter(task => {
+                const taskTags = Array.isArray(task.tags) ? task.tags.map(tag => tag.toLowerCase()) : [];
+                return selectedTags.some(tag => taskTags.includes(tag)); // Check if any selected tags match the task tags
+            });
+
+            return filteredTasks;
+        }
+
+        function updateTasks() {
+            const filteredTasks = filterTasks();
+            sortTasks(filteredTasks);  // Pass the filtered tasks to be sorted
+        }
+
+        
+        document.getElementById('sortOptions').addEventListener('change', updateTasks);
+        document.querySelectorAll('#tagDropdown input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', updateTasks);
+        });
+
+        // Utility function to convert priority to a comparable value
+        function getPriorityValue(priority) {
+            switch (priority?.toLowerCase()) {
+                case 'urgent': return 1;
+                case 'important': return 2;
+                case 'medium': return 3;
+                case 'low': return 4;
+                default: return 5;
+            }
+        }
+
+        // Create the HTML element for each task
+        function createTaskElement(task) {
+            const taskItem = document.createElement('div');
+            taskItem.classList.add('task-item');
+            taskItem.setAttribute('draggable', 'true'); // Make it draggable
+            taskItem.setAttribute('id', `task-${task.id}`); // Set a unique ID for each task
+            taskItem.ondragstart = (event) => drag(event); // Add drag start event
+
+            let priorityIcon = '';
+            switch (task.priority?.toLowerCase()) {
+                case 'urgent': priorityIcon = '🔴'; break;
+                case 'important': priorityIcon = '🟠'; break;
+                case 'medium': priorityIcon = '🟡'; break;
+                case 'low': priorityIcon = '🟢'; break;
+                default: priorityIcon = '⚪';
+            }
+
+            const tagContainer = document.createElement('div');
+            tagContainer.className = 'tags-container';
+
+            const taskTags = Array.isArray(task.tags) ? task.tags : [];
+
+            if (taskTags.length === 0) {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'tag-default';
+                tagElement.textContent = 'No Tags';
+                tagContainer.appendChild(tagElement);
+            } else {
+                taskTags.forEach(tag => {
+                    const tagClass = getTagClass(tag);
+                    const tagElement = document.createElement('span');
+                    tagElement.className = tagClass;
+                    tagElement.textContent = tag || 'No Tag';
+                    tagContainer.appendChild(tagElement);
+                });
+            }
+
+            taskItem.innerHTML = `
+                <h2 class="card-title" onclick="window.location.href='task-details-in-sprint.html?taskId=${task.id}'">${task.title}</h2>
+                <div class="card-content">
+                    <div class="tag-priority">
+                        <span class="story-points">${task.storyPoints || 0} SP</span>
+                    </div>
+                    <div class="priority">
+                        <span class="priority-icon">${priorityIcon}</span>
+                        <span class="priority-text">${task.priority || 'No Priority'} Priority</span>
+                    </div>
+                </div>
+            `;
+            taskItem.querySelector('.tag-priority').prepend(tagContainer);
+
+            return taskItem;
+        }
+
+        // Utility function to return the correct tag class
+        function getTagClass(tag) {
+            switch (tag?.toLowerCase()) {
+                case 'front-end': return 'tag-front-end';
+                case 'back-end': return 'tag-back-end';
+                case 'ui': return 'tag-ui';
+                case 'ux': return 'tag-ux';
+                case 'database': return 'tag-database';
+                case 'api': return 'tag-api';
+                case 'framework': return 'tag-framework';
+                case 'testing': return 'tag-testing';
+                default: return 'tag-default';
+            }
+        }
+
+        // Call the displayTasks function when the page loads
+        displayTasks();
+
+        document.querySelector('.list-btn').addEventListener('click', function() {
+            window.location.href = `sprint-backlog-list.html?sprintId=${sprintId}`;
+        });
+
+        function allowDrop(event) {
+            if (sprint.status === 'Active') {
+                event.preventDefault(); // Only allow drop if sprint is active
+            }
+        }
+
+        // Drag the task card
+        function drag(event) {
+            if (sprint.status === 'Active') {
+                event.dataTransfer.setData("text", event.target.id); // Only allow dragging if sprint is active
+            }
+        }
+
+        // Handle drop event and update task status
+        function drop(event, newStatus) {
+            if (sprint.status !== 'Active') return;
+
+            event.preventDefault();
+            const taskId = event.dataTransfer.getData("text"); // Get the task ID
+            const taskElement = document.getElementById(taskId);
+
+            // Find task in localStorage and update its status
+            const allTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            const taskToUpdate = allTasks.find(task => `task-${task.id}` === taskId);
+            if (taskToUpdate) {
+                taskToUpdate.status = newStatus; // Update status
+
+                // Save updated tasks to localStorage
+                localStorage.setItem('tasks', JSON.stringify(allTasks));
+
+                // Refresh the display to move the task card to the new status container
+                displayTasks();
+            }
+
+            // Check if the task was dropped in the "In Progress" section
+            if (event.currentTarget.id === 'in-progress') {
+                // Show the popup
+                showPopup();
+            }
+
+            // Check if the task was dropped in the "Completed" section to trigger confetti
+            if (event.currentTarget.id === 'completed') {
+                jsConfetti.addConfetti({
+                    emojis: ['🎉', '✨', '🎊', '🥳'],
+                    confettiNumber: 70,
+                    confettiColors: ['#ff0a54', '#ff477e', '#ff7096'],
+                    confettiRadius: 1,
+                });
+            }
+        }
+
+
+        function showPopup()
+        {
+            const popup = document.getElementById('popup');
+            popup.classList.remove('hidden'); // Show the popup
+            popup.classList.add('show'); // Add the show class for animation
+
+            // Automatically hide the popup after 3 seconds
+            setTimeout(() => {
+                popup.classList.remove('show'); // Start hiding animation
+                popup.classList.add('hide'); // Add hide class for animation
+            }, 3000); // Change the time as needed (3000ms = 3 seconds)
+
+            // Remove the popup from the DOM after the animation is done
+            setTimeout(() => {
+                popup.classList.add('hidden'); // Actually hide the popup
+                popup.classList.remove('hide'); // Remove hide class for next use
+            }, 3500); // 3500ms
+        }
+
+        function redirectToProfile() {
+            const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+            if (currentMember && currentMember.role) {
+                if (currentMember.role === 'member') {
+                    window.location.href = 'member-profile.html'; // Redirect to member profile
+                } else if (currentMember.role === 'admin') {
+                    window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+                } else {
+                    console.error('Invalid role found for the current member.');
+                }
+            } else {
+                console.error('No current member data found.');
+            }
+        }
+
+    </script>
+</body>
+</html>

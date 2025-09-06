@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrumble</title>
+    <link rel="icon" href="../images/tab-logo.png" type="png">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+        @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+      
+        body {
+            font-family: 'Futura', sans-serif; 
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            display: flex;
+            height: 100vh;
+            color: #6ec6e6;
+        }
+
+        .left-side {
+            width: 60%;
+            min-width: 768px; 
+            background-image: url('../images/Cover page image.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .right-side {
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 9rem;
+            box-sizing: border-box;
+            line-height: 1;
+        }
+
+        header {
+            font-family: "Bukhari Script", cursive; 
+            font-size: 45px;
+            color: #6ec6e6;
+            text-align: left;
+            box-sizing: border-box;
+            height: 170px; /* gap */
+            line-height: 1;
+        }
+
+        h2{
+            font-size: 20px;
+            font-family: 'Futura', sans-serif; 
+            color: #40556e;
+            text-align: left;
+            line-height: 1;
+            box-sizing: border-box;
+            font-weight: lighter;
+        }
+
+        nav {
+            text-align: left;
+            margin-top: 0;
+            line-height: 1;
+        }
+
+        nav a {
+            font-family: 'Futura', sans-serif;
+            color: black;
+            font-size: 12px;
+            text-decoration: none;
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-top: 0;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #6ec6e6;
+        }
+
+        .login-form {
+            width: 100%;
+            max-width: 300px;
+            padding-top: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-form label {
+            font-family: 'Futura', sans-serif;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="email"],
+        .login-form input[type="password"] {
+            width: 135%;
+            padding: 10px 20px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            border-radius: 20px;
+            border: none;
+            background-color: #e6e6e6;
+            box-sizing: border-box;
+            font-family: 'Futura', sans-serif;
+            font-size: 11px;
+        }
+
+        .login-form input[type="submit"] {
+            padding: 7px 30px;
+            border-radius: 20px;
+            border: none;
+            background-color: #6ec6e6;
+            color: white;
+            cursor: pointer;
+            font-family: 'Futura', sans-serif;
+            transition: background-color 0.3s;
+            font-size: 14px;
+            margin-top: 7px;
+        }
+
+        .login-form input[type="submit"]:hover {
+            background-color: #527eab;
+        }
+
+        .generate{
+            background-color: #f3af48;
+            color: #fff;
+            border: none;
+            padding: 7px 30px;
+            font-size: 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+        }
+
+        .generate:hover{
+            background-color: #d3884a;
+        }
+
+        .bck-button{
+            background-color: #cad9df;
+            color: #ffffff;
+            padding: 7px 30px;
+            font-size: 15px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .bck-button:hover {
+            background-color: #a7b1b4;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="left-side">
+        <!-- picture -->
+    </div>
+
+    <div class="right-side">
+        <header>
+            <h1>Scrumble</h1>
+        </header>
+      
+        <nav>
+            <a href="#">Your Perfect Project Management Tool</a>
+        </nav>
+
+        <div class="login-form">
+            <h2>Create New User Account</h2>
+            <form>
+                <label for="first-name">First Name:</label>
+                <input type="text" id="first-name" name="firstName" placeholder="Enter your first name" required autocomplete="off">
+
+                <label for="last-name">Last Name:</label>
+                <input type="text" id="last-name" name="lastName" placeholder="Enter your last name" required autocomplete="off">
+
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required autocomplete="off">
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required autocomplete="off">
+
+                <label for="password">Password:</label>
+                <input type="text" id="password" name="password" placeholder="Enter your password here" required autocomplete="off">
+                <button class="generate" type="button" id="generate-password">Generate Password</button>
+
+                <input type="submit" value="Create Account">
+                <button class="bck-button" type="button" onclick="window.history.back()">Back</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    document.querySelector('form').addEventListener('submit', function (e) {
+        e.preventDefault();  // Prevent form from submitting
+
+        // Get form data
+        const firstName = document.getElementById('first-name').value;
+        const lastName = document.getElementById('last-name').value;
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // Validation: Ensure all fields are filled
+        if (!firstName || !lastName || !username || !email || !password) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        // Get existing users from localStorage or set an empty array
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+
+        // Check if the username already exists
+        const valUser = users.find(user => user.username === username);
+        if (valUser) {
+            alert('You cannot create an account using the same username!');
+            return;
+        }
+
+        // Generate an auto-incrementing id
+        const newUserId = users.length > 0 ? users[users.length - 1].id + 1 : 1;
+
+        // Create a new user object
+        const newUser = {
+            id: newUserId,
+            firstName: firstName,
+            lastName: lastName,
+            username: username,
+            email: email,
+            password: password
+        };
+
+        // Add the new user to the users array
+        users.push(newUser);
+
+        // Store updated users array back in localStorage
+        localStorage.setItem('users', JSON.stringify(users));
+
+        // Notify success and redirect
+        alert('Successfully created an account!');
+        window.location.href = `member-profile-admin-view.html?memberId=${newUserId}`;
+    });
+
+    // Function to generate a secure password
+    function generatePassword(firstName, lastName) {
+        const randomNum = Math.floor(1000 + Math.random() * 9000); // Generate a random 4-digit number
+        const randomSpecialChars = "!@#$&";
+        const randomChar = randomSpecialChars[Math.floor(Math.random() * randomSpecialChars.length)];
+        
+        // Combine first and last name with random numbers and a special character
+        const password = `${firstName[0]}${firstName[1]}${lastName[0]}${lastName[1]}${randomNum}${randomChar}`;
+        
+        return password;
+    }
+
+    // Event listener for the "Generate Password" button
+    document.getElementById('generate-password').addEventListener('click', function () {
+        const firstName = document.getElementById('first-name').value;
+        const lastName = document.getElementById('last-name').value;
+
+        if (!firstName || !lastName) {
+            alert('Please enter your first and last name first!');
+            return;
+        }
+
+        // Generate and set the password
+        const generatedPassword = generatePassword(firstName, lastName);
+        document.getElementById('password').value = generatedPassword;
+    });
+
+</script>
+
+
+</html>

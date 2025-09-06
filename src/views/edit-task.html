@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrumble</title>
+    <link rel="icon" href="tab-logo.png" type="png">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+        @import url('https://fonts.cdnfonts.com/css/bukhari-script'); 
+
+        body {
+            font-family: 'Futura', sans-serif;
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #6ec6e6;
+            padding-left: 5rem;
+            padding-right: 5rem;
+            padding-top: 1.5rem;
+        }
+
+        body::-webkit-scrollbar {
+            width: 0; /* Remove scrollbar width */
+            height: 0; /* Remove scrollbar height for horizontal scroll */
+        }
+
+        header {
+            font-family: "Bukhari Script", cursive;
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #6ec6e6;
+            padding-bottom: 1rem;
+            position: relative;
+        }
+
+        nav {
+            display: flex;
+            gap: 5.0rem;
+        }
+
+        nav a {
+            font-family: 'Futura', sans-serif;
+            color: #6f85a6;
+            text-decoration: none;
+            font-size: 23px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #6ec6e6;
+        }
+
+        .user-logo {
+            width: 50px;
+            height: 50px;
+            background-image: url('user-icon.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: none;
+            transition: color 0.3s;
+        }
+
+        .user-logo:hover {
+            color: #6ec6e6;
+        }
+
+        hr {
+            height: 4px;
+            background-color: #6ec6e6;
+            border-color: #6ec6e6;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            padding-top: 15px;
+            border-radius: 8px;
+            background-color: #ffffff;
+        }
+
+        .task-header {
+            display: flex;
+            margin-bottom: 1rem;
+            flex-direction: row; /* Stack elements vertically */
+            position: relative; /* For positioning children */
+        }
+
+        .task-header textarea {
+            font-size: 30px;
+            color: #5a5959;
+            font-family: 'Trebuchet MS', sans-serif;
+            margin: 0;
+            min-width: 60%;
+            max-width: 60%;
+            border: none;
+            resize: none;
+            outline: none;
+            font-weight: bold;
+            border-radius: 15px;
+            padding: 10px;
+            overflow: hidden;
+            height: auto;
+            line-height: 1.2;
+            background-color:#e7ebee;
+        }
+
+
+        .button-group {
+            display: flex;
+            gap: 10px; /* Adds spacing between the buttons */
+            margin-left: auto;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .save-button, .cancel-button {
+            padding: 10px 20px; /* Adds padding inside the buttons */
+            font-size: 16px; /* Sets the font size */
+            font-family: 'Trebuchet MS', sans-serif; /* Matches the button font with the rest of the design */
+            border: none; /* Removes default border */
+            border-radius: 30px; /* Adds rounded corners */
+            cursor: pointer; /* Changes cursor to pointer on hover */
+            transition: background-color 0.3s ease, transform 0.2s; /* Adds a smooth transition effect */
+            max-height: fit-content;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        /* Save Button Styles */
+        .save-button {
+            background-color: #6ec6e6; /* Green color for save */
+            color: white; /* White text color */
+        }
+
+        .save-button:hover {
+            background-color: #7bd2f1; /* Darker green on hover */
+            transform: translateY(-1px); /* Slight lift on hover */
+        }
+
+        /* Cancel Button Styles */
+        .cancel-button {
+            background-color: rgb(188, 192, 197); /* Red color for cancel */
+            color: white; /* White text color */
+        }
+
+        .cancel-button:hover {
+            background-color: rgb(209, 212, 218); /* Darker red on hover */
+            transform: translateY(-1px); /* Slight lift on hover */
+        }
+            
+        .line {
+            width: 100%;
+            height: 2px;
+            background-color: #d3d3d3;
+            margin: 1rem 0;
+        }
+
+        .description-box {
+            display: flex;
+            gap: 3rem;
+            margin-right: 20rem;
+            min-height: 500px;
+        }
+
+        .task-info {
+            width: 18%;
+            border-right: 2px solid #d3d3d3;
+            font-family: 'Trebuchet MS', sans-serif;
+            padding-right: 3rem;
+            margin-left: 2%;
+        }
+
+        .task-info h3 {
+            font-size: 28px;
+            color: #40556e;
+            font-family: 'Trebuchet MS', sans-serif;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-info p1 {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .task-info li {
+            font-size: 18px;
+            color: #5a5959;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+        .task-info li span {
+            display: block;
+            color: #5dacc9;
+            margin-top: 0.5rem;
+        }
+
+        .task-description {
+            max-width: 60%;
+            padding-left: 3rem;
+            letter-spacing: 0px;
+            font-weight: light;
+            
+        }
+
+        .task-description h3 {
+            font-size: 28px;
+            color: #40556e;
+            font-family: 'Trebuchet MS', sans-serif;
+            margin-bottom: 1rem;
+            padding-right: 3rem;
+            margin-left: -4rem;
+        }
+
+        .task-box {
+            font-size: 16px;
+            border-radius: 15px;
+            background-color:#e7ebee;
+            color: #40556e;
+            padding: 20px;
+            width: 700px;
+            height: 100px;
+            margin-bottom: 1rem;
+            padding-right: 3rem;
+            margin-left: -4rem;
+            overflow: auto;
+            border: none;
+            font-family: 'Trebuchet MS', sans-serif;
+            outline: none;
+            resize: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .task-box:focus{
+            background-color:#daf4fc;
+        }
+
+        .task-details {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-left: -4rem;
+            margin-top: 2rem;
+        }
+
+        .task-details div {
+            font-size: 20px;
+            color: #5a5959;
+            font-family: 'Trebuchet MS', sans-serif;
+            line-height: 1.2;
+            
+        }
+
+        .task-details div span {
+            display: block;
+            margin-top: 0.5rem;
+            margin-left: 2.5rem;
+
+        }
+
+        .tags {
+            display: inline-block;
+            font-weight: bold;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tags select{
+            min-width: 100px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 80px;
+            color: #508dbc;
+        }
+
+        #taskStoryPoints{
+            display: flex;
+            flex-direction: column;
+            
+        }
+
+        #taskPriority{
+            display: flex;
+            flex-direction: column;
+        }
+
+        .task-details select {
+            flex: 1;
+            font-size: 16px;
+            color: #5a5959;
+            padding: 8px;
+            border: none;
+            background-color:#e7ebee;
+            border-radius: 10px;
+            padding-inline: 10px;
+            box-sizing: border-box;
+            margin-top: 10px;
+            outline: none;
+            font-family: 'Trebuchet MS', sans-serif;
+        }
+        .task-details select:hover{
+            background-color:#daf4fc;
+            transform: translateY(-2px);
+            color: #508dbc;
+        }
+
+        .task-info select,input{
+            background-color:#e7ebee;
+            border-radius: 10px;
+            margin-top: 10px;
+            padding: 8px;
+            border: none;
+            font-size: 16px;
+            outline: none;
+            color: #5a5959;
+            font-family: 'Trebuchet MS', sans-serif;
+            transition: background-color 0.3s ease,transform 0.3s ease,color 0.3s ease;
+        }
+
+        .task-info select:hover{
+            background-color:#daf4fc;
+            transform: translateY(-2px);
+            color: #508dbc;
+        }
+
+        .task-info input:focus{
+            background-color:#daf4fc;
+        }
+
+        .task-info input{
+            display: flex;
+            max-width: 100%;
+        }
+
+        .tags-checkbox-group {
+        display: flex;
+        flex-direction: column;
+        max-width: 300px;
+        align-items: flex-start;
+        background-color: #e7ebee;
+        border-radius: 10px;
+        padding: 15px;
+        }
+
+        .tags-checkbox-group label {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tags-checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+            margin-left: 0;
+        }
+
+        .tags {
+        display: flex;
+        align-items: flex-start; /* Aligns items in the flex container */
+        gap: 10px; /* Adds space between "Tags:" and the checkboxes */
+        }
+        .logout-button{
+            background-color: #66ccff;
+            color: #fff;
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            margin-left: 150px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover{
+            background-color: #56a6c4;
+        }
+
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body onload="checkAuthentication()">
+    <header>
+        <div class="logo">Scrumble</div>
+        <nav>
+            <a href="overview.html">Product Backlog</a>
+            <a href="sprint_board.html">Sprint Board</a>
+        </nav>
+        <div class="logout-button" onclick="logout()">Log out</div>
+        <div class="user-logo" onclick="redirectToProfile()"></div>
+    </header>
+    <hr>
+
+    <div class="content">
+        <div class="task-header">
+            <textarea type="text" id="taskTitle" class="task-title-input" placeholder="Task Title" value=""></textarea>
+            <div class="button-group">
+                <button id="saveButton" class="save-button">Save Changes</button>
+                <button onclick="window.history.back()" class="cancel-button">Cancel</button>
+            </div>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="description-box">
+            <div class="task-info">
+                <h3>Information</h3>
+                <ul>
+                    <li><strong>Task Status:</strong>
+                        <select id="taskStatus" name="taskStatus">
+                            <option value="Not-Started">Not Started</option>
+                            <option value="In-progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </li>
+                    <li><strong>Task Assignee:</strong>
+                        <select id="taskAssignee">
+                            <option value="" disabled selected>Select Assignee</option>
+                        </select>
+                    </li>
+                    <li><strong>Task Stages:</strong>
+                        <select id="taskStage" name="taskStage">
+                            <option value="Planning">Planning</option>
+                            <option value="Developing">Developing</option>
+                            <option value="Testing">Testing</option>
+                            <option value="Integrating">Integrating</option>
+                        </select>
+                    </li>
+                    <li><strong>Task Type:</strong>
+                        <select id="taskType" name="attribute7">
+                            <option value="Story">Story</option>
+                            <option value="Bug">Bug</option>
+                        </select>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="task-description">
+                <h3>Description</h3>
+                <textarea id="taskDescription" class="task-box" placeholder="Task description..."></textarea>
+
+                <div class="task-details">
+                    <div class="story-points">
+                        <strong>Story Points:</strong>
+                        <select id="taskStoryPoints" name="taskStoryPoints">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                    <div class="priority">
+                        <strong>Priority:</strong>
+                        <select id="taskPriority" name="taskPriority">
+                            <option value="Low">🟢 Low</option>
+                            <option value="Medium">🟡 Medium</option>
+                            <option value="Important">🟠 Important</option>
+                            <option value="Urgent">🔴 Urgent</option>
+                        </select>
+                    </div>
+                    <div class="tags">
+                        <strong>Tags:</strong>
+                        <div class="tags-checkbox-group" id="attribute6">
+                            <label for="frontend">
+                                <input type="checkbox" id="frontend" name="attribute6" value="Front-End">
+                                Front-End
+                            </label>
+                    
+                            <label for="backend">
+                                <input type="checkbox" id="backend" name="attribute6" value="Back-End">
+                                Back-End
+                            </label>
+                    
+                            <label for="ui">
+                                <input type="checkbox" id="ui" name="attribute6" value="UI">
+                                UI
+                            </label>
+                    
+                            <label for="ux">
+                                <input type="checkbox" id="ux" name="attribute6" value="UX">
+                                UX
+                            </label>
+                    
+                            <label for="database">
+                                <input type="checkbox" id="database" name="attribute6" value="Database">
+                                Database
+                            </label>
+                    
+                            <label for="api">
+                                <input type="checkbox" id="api" name="attribute6" value="API">
+                                API
+                            </label>
+                    
+                            <label for="framework">
+                                <input type="checkbox" id="framework" name="attribute6" value="Framework">
+                                Framework
+                            </label>
+                    
+                            <label for="testing">
+                                <input type="checkbox" id="testing" name="attribute6" value="Testing">
+                                Testing
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkAuthentication() {
+            // Retrieve currentMember from localStorage
+            const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            // If currentMember does not exist or memberId is -1, redirect to index.html
+            if (!currentMember || currentMember.memberId === -1) {
+                window.location.href = 'index.html'; // Redirect to login page
+            }
+        }
+
+        function logout() {
+            // Get the currentMember from localStorage
+            let currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            if (currentMember) {
+                // Update the role and memberId
+                currentMember.role = 'None';
+                currentMember.memberId = -1;
+
+                // Save the updated currentMember back to localStorage
+                localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+                // Redirect to the index.html page (or login page)
+                window.location.href = 'index.html';
+            } else {
+                console.error('No currentMember found in localStorage.');
+            }
+        }
+        
+        function getPriorityIcon(priority) {
+            switch (priority?.toLowerCase()) {
+                case 'low':
+                    return '🟢'; 
+                case 'medium':
+                    return '🟡'; 
+                case 'important':
+                    return '🟠'; 
+                case 'urgent':
+                    return '🔴'; 
+            }
+        }
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const taskId = urlParams.get('taskId');
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            // Retrieve tasks from localStorage
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            const productBacklog = JSON.parse(localStorage.getItem('product-backlog')) || [];
+            
+            // Find task in both 'tasks' and 'product-backlog'
+            const task = tasks.find(t => t.id === taskId);
+            const backlogTask = productBacklog.find(t => t.id === taskId);
+    
+            if (task) {
+                document.getElementById('taskTitle').value = task.title;
+                const taskAssigneeSelect = document.getElementById('taskAssignee');
+                document.getElementById('taskDescription').value = task.description || '';
+                
+                // Populate the select options with users' full names
+                users.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id; // Use user.id as the value
+                    option.textContent = `${user.firstName} ${user.lastName}`; // Display the full name
+                    taskAssigneeSelect.appendChild(option);
+                });
+
+                if (task && task.assignee) {
+                    // Find the user with the matching ID
+                    const assignedUser = users.find(user => user.id === Number(task.assignee));
+                    console.log(assignedUser)
+                    if (assignedUser) {
+                        // Set the selected value to the assigned user's ID
+                        taskAssigneeSelect.value = assignedUser.id;
+                    }
+                }
+
+                // When the user selects an assignee, update task.assignee with the selected user.id
+                taskAssigneeSelect.addEventListener('change', function() {
+                    const selectedUserId = taskAssigneeSelect.value;
+                    // Assuming `task` is already available
+                    task.assignee = selectedUserId;
+                    console.log(`Assigned user ID: ${task.assignee}`);
+                });
+
+
+                const statusContainer = document.getElementById('taskStatus');
+                if (task.status) {
+                    statusContainer.value = task.status;
+                }
+    
+                const typeContainer = document.getElementById('taskType');
+                if (task.type) {
+                    typeContainer.value = task.type;
+                }
+    
+                const stageContainer = document.getElementById('taskStage');
+                if (task.stage) {
+                    stageContainer.value = task.stage;
+                }
+    
+                const pointsContainer = document.getElementById('taskStoryPoints');
+                if (task.storyPoints) {
+                    pointsContainer.value = task.storyPoints;
+                }
+    
+                const priorityContainer = document.getElementById('taskPriority');
+                if (task.priority) {
+                    priorityContainer.value = `${task.priority || 'No Priority'}`;
+                }
+    
+                const taskTags = task.tags || []; 
+                const checkboxes = document.querySelectorAll('.tags-checkbox-group input[type="checkbox"]');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = taskTags.includes(checkbox.value);
+                });
+            } else {
+                console.error('Task not found');
+            }
+    
+            // Save changes to the task and update both 'tasks' and 'product-backlog'
+            document.getElementById('saveButton').addEventListener('click', function () {
+                if (task) {
+                    // Update task data
+                    task.title = document.getElementById('taskTitle').value;
+                    task.status = document.getElementById('taskStatus').value;
+                    task.assignee = document.getElementById('taskAssignee').value;
+                    task.stages = document.getElementById('taskStage').value;
+                    task.type = document.getElementById('taskType').value;
+                    task.description = document.getElementById('taskDescription').value;
+                    task.storyPoints = parseInt(document.getElementById('taskStoryPoints').value) || 0;
+                    task.priority = document.getElementById('taskPriority').value;
+    
+                    const tagElements = document.querySelectorAll('#attribute6 input[type="checkbox"]:checked');
+                    task.tags = Array.from(tagElements).map(checkbox => checkbox.value);
+    
+                    const currentTime = getFormattedDateTime();
+                    task.editTime.push(currentTime);
+    
+                    // Update task in 'tasks' list
+                    localStorage.setItem('tasks', JSON.stringify(tasks));
+    
+                    // If task exists in product backlog, update the product-backlog as well
+                    if (backlogTask) {
+                        backlogTask.title = task.title;
+                        backlogTask.status = task.status;
+                        backlogTask.assignee = task.assignee;
+                        backlogTask.stages = task.stages;
+                        backlogTask.type = task.type;
+                        backlogTask.description = task.description;
+                        backlogTask.storyPoints = task.storyPoints;
+                        backlogTask.priority = task.priority;
+                        backlogTask.tags = task.tags;
+                        backlogTask.createdTime = task.createdTime;
+                        backlogTask.editTime = task.editTime;
+    
+                        // Update the product-backlog in localStorage
+                        localStorage.setItem('product-backlog', JSON.stringify(productBacklog));
+                    }
+    
+                    window.history.back();
+                }
+            });
+    
+            const textArea = document.querySelector('.task-header textarea');
+    
+            function autoResizeTextarea() {
+                textArea.style.height = 'auto'; 
+                textArea.style.height = textArea.scrollHeight + 'px';
+            }
+    
+            function getFormattedDateTime() {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+    
+                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            }
+    
+            textArea.addEventListener('input', autoResizeTextarea);
+            autoResizeTextarea(); 
+        });
+
+        function redirectToProfile() {
+            const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+            if (currentMember && currentMember.role) {
+                if (currentMember.role === 'member') {
+                    window.location.href = 'member-profile.html'; // Redirect to member profile
+                } else if (currentMember.role === 'admin') {
+                    window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+                } else {
+                    console.error('Invalid role found for the current member.');
+                }
+            } else {
+                console.error('No current member data found.');
+            }
+        }
+    </script>    
+</body>
+</html>
+

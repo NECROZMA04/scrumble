@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Scrumble</title>
+        <link rel="icon" href="tab-logo.png" type="png">
+        <style>
+            @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+            @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+    
+            body {
+                font-family: 'Futura', sans-serif;
+                line-height: 1.6;
+                background-color: #ffffff;
+                color: #6ec6e6;
+                padding-left: 5rem;
+                padding-right: 5rem;
+                padding-top: 1.5rem;
+                overflow: auto;
+            }
+
+            body::-webkit-scrollbar {
+                width: 0; /* Remove scrollbar width */
+                height: 0; /* Remove scrollbar height for horizontal scroll */
+            }
+    
+            header {
+                font-family: "Bukhari Script", cursive;
+                font-size: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                color: #6ec6e6;
+                padding-bottom: 1rem;
+                position: relative;
+            }
+    
+            nav {
+                display: flex;
+                gap: 5.0rem;
+            }
+    
+            nav a {
+                font-family: 'Futura', sans-serif;
+                color: #6f85a6;
+                text-decoration: none;
+                font-size: 23px;
+                transition: color 0.3s;
+            }
+    
+            nav a:hover {
+                color: #6ec6e6;
+            }
+    
+            .user-logo {
+                width: 50px;
+                height: 50px;
+                background-image: url('user-icon.png');
+                background-size: cover;
+                background-position: center;
+                border-radius: 50%;
+                border: none;
+                transition: color 0.3s;
+            }
+    
+            .user-logo:hover {
+                color: #6ec6e6;
+            }
+    
+            hr {
+                height: 4px;
+                background-color: #6ec6e6;
+                border-color: #6ec6e6;
+                border: none;
+                border-radius: 20px;
+            }
+    
+            .content {
+                display: flex;
+                flex-direction: column;
+                padding-top: 15px;
+                border-radius: 8px;
+                background-color: #ffffff;
+            }
+    
+            .task-header {
+                display: flex;
+                margin-bottom: 1rem;
+                flex-direction: row; /* Stack elements vertically */
+                position: relative; /* For positioning children */
+            }
+    
+            .task-header h2 {
+                font-size: 30px;
+                color: #5a5959;
+                font-family: 'Trebuchet MS', sans-serif;
+                margin: 0;
+                max-width: 60%;
+                overflow-wrap: break-word; /* Ensures long words break to fit within the container */
+                word-wrap: break-word; /* Alternative for older browsers */
+                word-break: normal; /* Forces word to break at any character to fit */
+                white-space: normal; /* Allows text to wrap onto the next line */
+                
+                display: block;
+            }
+            .edit-button{
+                margin-top: auto;
+            }
+    
+            .edit-button a{
+                background-color: rgb(228, 231, 235);
+                text-decoration: none;
+                font-size: 12px;
+                font-weight: bold;
+                color: #a1a3a5;
+                border-radius: 30px;
+                padding: 5px 10px;
+                font-family: 'Trebuchet MS', sans-serif;
+                text-align: left;
+                max-height: 20px;
+                align-items: center;
+                margin-top: auto;
+                margin-left: 15px;
+                cursor: pointer;
+                transition: background-color 0.2s ease,transform 0.2s ease;
+            }
+
+            .edit-button a:hover {
+                background-color: rgb(223, 227, 233);
+                transform: scale(1.03);
+            }
+    
+            .pen-icon-container {
+                display: inline-flex; /* Center the image inside the container */
+                justify-content: center;
+                align-items: center;
+                width: 40px; /* Adjust the size as needed */
+                height: 40px; /* Adjust the size as needed */
+                background-color: #8e9ba7; /* Grey background color */
+                border-radius: 50%; /* Makes the container circular */
+                cursor: pointer;
+                margin-top: auto;
+                margin-left: auto; /* Optional: for alignment */
+                transition: background-color 0.5s ease;
+                margin-right: 2%;
+            }
+
+            .pen-icon {
+                margin-top: 5px;
+                width: 30px; /* Adjust the size of the pen icon */
+                height: 30px;
+            }
+
+            .pen-icon-container:hover {
+                background-color: #b3bcc5; /* Grey background color */
+            }
+                
+            .line {
+                width: 100%;
+                height: 2px;
+                background-color: #d3d3d3;
+                margin: 1rem 0;
+            }
+    
+            .description-box {
+                display: flex;
+                gap: 3rem;
+                margin-right: 20rem;
+                min-height: 500px;
+            }
+    
+            .task-info {
+                width: 15%;
+                border-right: 2px solid #d3d3d3;
+                font-family: 'Trebuchet MS', sans-serif;
+                padding-right: 3rem;
+                margin-left: 2%;
+            }
+    
+            .task-info h3 {
+                font-size: 28px;
+                color: #40556e;
+                font-family: 'Trebuchet MS', sans-serif;
+                margin-bottom: 0.5rem;
+            }
+    
+            .task-info p1 {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+    
+            .task-info li {
+                font-size: 18px;
+                color: #5a5959;
+                margin-bottom: 2rem;
+                line-height: 1.2;
+            }
+    
+            .task-info li span {
+                display: block;
+                color: #5dacc9;
+                margin-top: 0.5rem;
+            }
+    
+            .task-description {
+                max-width: 60%;
+                padding-left: 3rem;
+            }
+    
+            .task-description h3 {
+                font-size: 28px;
+                color: #40556e;
+                font-family: 'Trebuchet MS', sans-serif;
+                margin-bottom: 1rem;
+                padding-right: 3rem;
+                margin-left: -4rem;
+            }
+    
+            .task-box {
+                border-radius: 25px;
+                background: #daf4fc;
+                color: #40556e;
+                padding: 20px;
+                width: 700px;
+                min-height: 100px; /* Set minimum height */
+                margin-bottom: 1rem;
+                padding-right: 3rem;
+                margin-left: -4rem;
+                overflow: auto; /* Keeps content scrollable if necessary */
+                max-height: none; /* Optional: Restrict the maximum height relative to the viewport */
+            }
+    
+            .task-details {
+                display: flex;
+                justify-content: space-between;
+                gap: 1rem;
+                margin-left: -4rem;
+                margin-top: 2rem;
+            }
+    
+            .task-details div {
+                font-size: 20px;
+                color: #5a5959;
+                font-family: 'Trebuchet MS', sans-serif;
+                line-height: 1.2;
+                
+            }
+    
+            .task-details div span {
+                display: block;
+                margin-top: 0.5rem;
+                margin-left: 2.5rem;
+
+            }
+
+            .tags {
+                display: inline-block;
+                font-weight: bold;
+                text-align: center;
+            }
+
+            .tags span{
+                min-width: 100px;
+                border-radius: 20px;
+                font-size: 12px;
+            }
+
+            #taskStoryPoints{
+                color: #508dbc;
+            }
+
+            #taskPriority{
+                color: #508dbc;
+                font-size: 18px;
+            }
+
+            .back-button {
+                position: fixed; /* Fixed positioning to place it relative to the viewport */
+                bottom: 50px; /* Distance from the bottom of the viewport */
+                right: 100px; /* Distance from the right of the viewport */
+                padding: 10px 20px; /* Padding for button size */
+                font-size: 16px; /* Font size */
+                font-family: 'Futura', sans-serif; /* Font style */
+                background-color: #d3d3d3; /* Button background color */
+                color: white; /* Text color */
+                border: none; /* Remove border */
+                border-radius: 30px; /* Rounded corners */
+                cursor: pointer; /* Pointer cursor on hover */
+                transition: background-color 0.3s ease, transform 0.2s; /* Smooth transitions */
+            }
+
+            .back-button:hover {
+                background-color: #7bd2f1; /* Change color on hover */
+                transform: translateY(-1px); /* Slight lift on hover */
+            }
+
+            .time-logging {
+                border: #6ec6e6 2px solid;
+                border-radius: 10px;
+                color: #40556e;
+                padding: 20px 15px;
+            }
+            .save-button{
+                border: none;
+                font-weight: bold;
+                background-color: #6ec6e6;
+                padding: 10px 15px;
+                color: #fff;
+                border-radius: 20px;
+                cursor: pointer;
+            }
+
+            .time-input {
+                border: none;
+                background-color: #e7eaee;
+                border-radius: 10px;
+                padding: 5px 10px;
+                margin-bottom: 15px;
+                width: 60px;
+                outline: none;
+                margin-left: 10px;
+            }
+
+            #timeLogList li {
+                background-color: #daf4fc;
+                border-radius: 10px;
+                font-size: 14px;           
+                padding: 10px;             
+                margin-bottom: 15px;       
+                transition: background-color 0.3s ease; 
+            }
+
+            #timeLogList li:hover {
+                background-color: #e7e9eb;     
+            }
+
+            
+            .logout-button{
+                background-color: #66ccff;
+                color: #fff;
+                font-size: 20px;
+                padding: 5px 10px;
+                border-radius: 20px;
+                display: flex;
+                margin-left: 150px;
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .logout-button:hover{
+                background-color: #56a6c4;
+            }
+
+
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+    <body onload="checkAuthentication()">
+        <header>
+            <div class="logo">Scrumble</div>
+            <nav>
+                <a href="overview.html">Product Backlog</a>
+                <a href="sprint_board.html">Sprint Board</a>
+            </nav>
+            <div class="logout-button" onclick="logout()">Log out</div>
+            <div class="user-logo" onclick="redirectToProfile()"></div>
+        </header>
+        <hr>
+    
+
+        <div class="content">
+        <!-- Task header -->
+            <div class="task-header">
+                <h2 id="taskTitle">Task Title</h2>
+                <!-- Editing Icon -->
+                <div class="edit-button">
+                    <a id="editTime" href="#">Edited <span></span></a>
+                </div>
+                <div class="pen-icon-container">
+                    <a id="editLink" href="#">
+                        <img src="pen-icon.png" alt="Edit" class="pen-icon">
+                    </a>
+                </div>
+            </div>
+
+            <!-- Light Grey Line -->
+            <div class="line"></div>
+
+            <!-- Description Box -->
+            <div class="description-box">
+                <!-- Task Information -->
+                <div class="task-info">
+                    <h3>Information</h3>
+                    <ul>
+                        <li><strong>Task Status:</strong>
+                            <span id="taskStatus">Unknown</span>
+                        </li>
+                        <li><strong>Task Assignee:</strong>
+                            <span id="taskAssignee">Assignee Name</span>
+                        </li>
+                        <li><strong>Task Stages:</strong>
+                            <span id="taskStages">Unknown Stages</span>
+                        </li>
+                        <li><strong>Task Type:</strong>
+                            <span id="taskType">Unknown Type</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Task description Header -->
+                <div class="task-description">
+                    <h3>Description</h3>
+                    <div id="taskDescription" class="task-box">
+                        <!-- Editable description area -->
+                        Task description...
+                    </div>
+
+                    <!-- Task Details -->
+                    <div class="task-details">
+                        <div class="story-points"><strong>Story Point:</strong>
+                            <span id="taskStoryPoints">0 SP</span>
+                        </div>
+                        <div class="priority"><strong>Priority:</strong>
+                            <span id="taskPriority">Tag</span>
+                        </div>
+                        <div class="tags"><strong>Tag:</strong>
+                            <span id="taskTags">Tag</span>
+                        </div>
+                    </div>
+
+                    <h3>Log Time Span</h3>
+                    <div class="time-logging">
+                        <div class="time-log-container">
+                            <div class="time-spent">
+                                <label for="timeSpentHours">Time Spent: </label>
+                                <input type="number" id="timeSpentHours" class="time-input" placeholder="Hours" min="0" step="1">
+                                <label for="timeSpentHours">Hours</label>
+                                <input type="number" id="timeSpentMinutes" class="time-input" placeholder="Minutes" min="0" max="59" step="1">
+                                <label for="timeSpentHours">Mins</label>
+                            </div>
+                        </div>
+                            <button id="logTimeButton" class="save-button">Log Time</button>
+                            
+                            <!-- Logged time entries list -->
+                            <h4>Logged Time Entries:</h4>
+                            <ul id="timeLogList"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="back-button" onclick="window.history.back()">Back</button>
+        <script>
+            function checkAuthentication() {
+                // Retrieve currentMember from localStorage
+                const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+                // If currentMember does not exist or memberId is -1, redirect to index.html
+                if (!currentMember || currentMember.memberId === -1) {
+                    window.location.href = 'index.html'; // Redirect to login page
+                }
+            }
+
+            function logout() {
+                // Get the currentMember from localStorage
+                let currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+                if (currentMember) {
+                    // Update the role and memberId
+                    currentMember.role = 'None';
+                    currentMember.memberId = -1;
+
+                    // Save the updated currentMember back to localStorage
+                    localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+                    // Redirect to the index.html page (or login page)
+                    window.location.href = 'index.html';
+                } else {
+                    console.error('No currentMember found in localStorage.');
+                }
+            }
+            function getUrlParameter(name) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(name);
+            }
+
+            function getPriorityIcon(priority) {
+                switch (priority?.toLowerCase()) {
+                    case 'low':
+                        return '🟢'; 
+                    case 'medium':
+                        return '🟡'; 
+                    case 'important':
+                        return '🟠'; 
+                    case 'urgent':
+                        return '🔴'; 
+                }
+            }
+
+            function getStyledTags(tagsArray) {
+                const tagColors = {
+                    'front-end': 'background-color: #ffd561; color: #fff;',
+                    'back-end': 'background-color: #66ccff; color: #fff;',
+                    'ui': 'background-color: #ff99cc; color: #fff;',
+                    'ux': 'background-color: #cc99ff; color: #fff;',
+                    'database': 'background-color: #66e91b; color: #fff;',
+                    'api': 'background-color: #ff5757; color: #fff;',
+                    'framework': 'background-color: #ff914d; color: #fff;',
+                    'testing': 'background-color: #5271ff; color: #fff;',
+                };
+
+                if (!tagsArray || tagsArray.length === 0) {
+                    return '<span class="tags" style="padding: 5px 10px; border-radius: 20px; font-size: 16px; background-color: #ccc; color: #fff;">No Tags</span>';
+                }
+
+                // Map each tag in the array to a styled HTML element
+                return tagsArray.map(tag => {
+                    const style = tagColors[tag.trim().toLowerCase()] || 'background-color: #ccc; color: #fff;'; // Default style
+                    return `<span class="tags" 
+                            style="padding: 5px 10px;
+                                border-radius: 20px;
+                                font-size: 16px;
+                                ${style}">${tag.trim()}</span>`;
+                }).join(' ');
+            }
+
+            function formatTimeDifference(createdTime) {
+                const now = new Date();
+                const created = new Date(createdTime);
+                const diffInMinutes = Math.floor((now - created) / 60000);
+
+                if (diffInMinutes < 1) return 'just now';
+                if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
+                const diffInHours = Math.floor(diffInMinutes / 60);
+                if (diffInHours < 24) return `${diffInHours} hours ago`;
+                const diffInDays = Math.floor(diffInHours / 24);
+                return `${diffInDays} days ago`;
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const taskId = getUrlParameter('taskId');
+                const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+                const task = tasks.find(t => t.id === taskId);
+
+                const memberId = task.assignee;
+
+                if (memberId) {
+                    // Retrieve users from localStorage
+                    const users = JSON.parse(localStorage.getItem('users')) || [];
+                    // Find the user that matches the memberId
+                    const user = users.find(u => u.id === Number(memberId));
+                    console.log(user)
+                    if (user) {
+                        // Populate the form with user details
+                        document.getElementById('taskAssignee').textContent = `${user.firstName} ${user.lastName}` || 'Not Assigned';
+                    } else {
+                        console.error('User not found');
+                    }
+                } else {
+                    console.error('Current assignee not found');
+                }
+
+                if (task) {
+                    // Display task details
+                    document.getElementById('taskTitle').textContent = task.title;
+                    document.getElementById('taskStatus').textContent = task.status || 'Not Started';
+                    document.getElementById('taskStages').textContent = task.stages || 'Unknown Stage';
+                    document.getElementById('taskType').textContent = task.type || 'Unknown Type';
+                    document.getElementById('taskDescription').textContent = task.description || 'No Description Available';
+                    document.getElementById('taskStoryPoints').textContent = `${task.storyPoints || 0} SP`;
+                    document.getElementById('taskTags').textContent = task.tags || 'No Tag';
+
+                    const priorityIcon = getPriorityIcon(task.priority);
+                    const priorityContainer = document.getElementById('taskPriority');
+                    priorityContainer.innerHTML = `${priorityIcon} ${task.priority || 'No Priority'}`;
+
+                    const tagContainer = document.getElementById('taskTags');
+                    tagContainer.innerHTML = getStyledTags(task.tags);
+
+                    const timeDifference = formatTimeDifference(task.createdTime);
+                    document.querySelector('.task-header a').textContent = `Edited ${timeDifference}`;
+
+                    // Retrieve currentMember from localStorage
+                    const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember table
+                    const memberId = currentMember ? currentMember.memberId : null; // Access the memberId from the array
+
+                    // Retrieve users from localStorage
+                    const users = JSON.parse(localStorage.getItem('users')) || [];
+                    const user = users.find(u => u.id === memberId); // Find user by memberId
+
+                    if (user && user.logtimeshistory) {
+                        // Filter log times for the current task
+                        const taskLogEntries = user.logtimeshistory.filter(log => log.taskId === taskId);
+
+                        const timeLogList = document.getElementById('timeLogList');
+                        timeLogList.innerHTML = ''; // Clear any previous entries
+
+                        // Display each log entry
+                        taskLogEntries.forEach(log => {
+                            const logItem = document.createElement('li');
+                            logItem.textContent = `User ID: #${user.id}    |    Time: ${(log.timeSpent / 60).toFixed(2)}h    |    Date: ${log.localDate}`;
+                            timeLogList.appendChild(logItem);
+                        });
+
+                    } else {
+                        console.log('No logged time entries found for this task.');
+                    }
+                } else {
+                    // Handle case where task is not found
+                    console.error('Task not found');
+                }
+
+                // Set edit links
+                const editLink = document.getElementById('editLink');
+                const editTime = document.getElementById('editTime');
+                editLink.href = `edit-task.html?taskId=${taskId}`;
+                editTime.href = `edit-history.html?taskId=${taskId}`;
+            });
+
+
+
+            document.getElementById('logTimeButton').addEventListener('click', function () {
+                // Get the time inputs
+                const id = getUrlParameter('taskId');
+                const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+                const task = tasks.find(t => t.id === id);
+                const hours = parseInt(document.getElementById('timeSpentHours').value) || 0;
+                const minutes = parseInt(document.getElementById('timeSpentMinutes').value) || 0;
+
+                // Check if both inputs are valid
+                if (hours === 0 && minutes === 0) {
+                    alert('Please enter a valid time.');
+                    return;
+                }
+
+                // Retrieve the currentMember from localStorage
+                const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember table
+                const memberId = currentMember ? currentMember.memberId : null; // Access the memberId from the array
+
+                if (task.assignee !== String(memberId)){
+                    alert('You are not assigned to this task!');
+                    return;
+                }
+
+                if (!memberId) {
+                    alert('No logged in user found.');
+                    return;
+                }
+
+                // Retrieve the sprints array from localStorage
+                const sprints = JSON.parse(localStorage.getItem('sprints')) || [];
+                let currentSprint = null;
+
+                // Loop through each sprint to find the one that contains the current task
+                sprints.forEach(sprint => {
+                    if (sprint.tasks.some(t => t.id === id)) {
+                        currentSprint = sprint; // Found the sprint that holds the current task
+                    }
+                });
+
+                // Check if the sprint was found and its status is 'active'
+                if (currentSprint) {
+                    if (currentSprint.status !== 'Active') {
+                        alert('Task is not in an active sprint!');
+                        return;
+                    }
+                } else {
+                    alert('Sprint not found for the task.');
+                    return;
+                }
+
+                // Retrieve the users array from localStorage
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const user = users.find(user => user.id === memberId);
+
+                if (!user) {
+                    alert('User not found.');
+                    return;
+                }
+
+                // Assuming you have the taskId stored in a global variable or element
+                const taskId = getUrlParameter('taskId');
+
+                // Create a log entry with taskId, time (in hours), and the current date
+                const logEntry = {
+                    taskId: taskId,
+                    timeSpent: (hours * 60) + minutes, // convert total time to minutes
+                    localDate: new Date().toISOString().slice(0, 10) // current date in YYYY-MM-DD format
+                };
+
+                // Store the log entry in the user's log time history
+                if (!user.logtimeshistory) {
+                    user.logtimeshistory = [];
+                }
+
+                user.logtimeshistory.push(logEntry);
+
+                // Update the user back in localStorage
+                localStorage.setItem('users', JSON.stringify(users));
+                location.reload();
+            });
+
+            function redirectToProfile() {
+                const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+                if (currentMember && currentMember.role) {
+                    if (currentMember.role === 'member') {
+                        window.location.href = 'member-profile.html'; // Redirect to member profile
+                    } else if (currentMember.role === 'admin') {
+                        window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+                    } else {
+                        console.error('Invalid role found for the current member.');
+                    }
+                } else {
+                    console.error('No current member data found.');
+                }
+            }
+
+        </script>
+    </body>
+</html>

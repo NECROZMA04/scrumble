@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrumble</title>
+    <link rel="icon" href="../images/tab-logo.png" type="png">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+        @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+
+        body {
+            font-family: 'Futura', sans-serif; 
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #6ec6e6;
+            padding-left: 5rem;
+            padding-right: 5rem;
+            padding-top: 1.5rem;
+            min-height: 100%;
+            overflow: auto;
+        }
+
+        body::-webkit-scrollbar {
+            width: 0; /* Remove scrollbar width */
+            height: 0; /* Remove scrollbar height for horizontal scroll */
+        }
+
+        header {
+            font-family: "Bukhari Script", cursive; 
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #6ec6e6;
+            padding-bottom: 1rem;
+            position: relative;
+        }
+
+        nav {
+            display: flex;
+            gap: 5.0rem;
+        }
+
+        nav a {
+            font-family: 'Futura', sans-serif;
+            color: #6f85a6;
+            text-decoration: none;
+            font-size: 23px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #6ec6e6;
+        }
+
+        .user-logo {
+            width: 50px;
+            height: 50px;
+            background-image: url('../images/user-icon.png'); 
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s,transform 0.2s ease;
+        }
+
+        .user-logo:hover {
+            color: #6ec6e6;
+            transform: scale(1.1);
+        }
+
+        hr {
+            height: 4px;
+            background-color: #6ec6e6;
+            border-color: #6ec6e6;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .content {
+            padding: 0.5rem 2rem;
+            text-align: center;
+        }
+
+        #tasksContainer {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            gap: 20px;
+            max-width: 100%;
+            justify-content: flex-start;
+        }
+
+        .task h2 {
+            margin-left: 10px;
+            font-size: 20px;
+            color: #40556e;
+            flex-wrap: wrap; /* Allows the text to wrap within the element */
+            white-space: normal; /* Allows text to break and wrap normally */
+            overflow-wrap: break-word; /* Ensures long words break to prevent overflow */
+            word-wrap: break-word; 
+        }
+
+        .task p {
+            margin-top: 2px;
+            margin-left: 20px;
+            font-size: 15px;
+        }
+
+        
+        .add-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            padding: 20px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .add-buttons button {
+            background-color: transparent;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .add-buttons button:hover {
+            transform: scale(1.02);
+        }
+
+        .add-buttons .plus-sign {
+            background-color: #6ec6e6;
+            color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            position: absolute;
+            right: 40px;
+            bottom: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            transition: background-color 0.5s ease;
+        }
+
+        .add-buttons .plus-sign:hover {
+            background-color: #4f8fb5;
+        }
+
+        .add-buttons .history-button {
+            background-color: #99e2f8;
+            color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 15px;
+            position: absolute;
+            right: 40px;
+            bottom: 100px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+
+        .add-buttons .history-button:hover {
+            background-color: #7aadcf;
+        }
+
+        .filter-sort {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
+
+        .filter-sort select {
+            padding: 5px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 2px solid #6ec6e6;
+            background-color: #e8f6fb;
+            cursor: pointer;
+            color: #2e587d;
+        }
+
+        .filter-sort select option {
+            padding: 8px 12px;
+            color: #2e587d;
+            background-color: #e8f6fb;
+            transition: background-color 0.3s;
+        }
+
+        .filter-sort select option:hover {
+            background-color: #1BA1E2 !important;
+        }
+        
+        .heading {
+            font-family: 'Futura', sans-serif;
+            color: #6ec6e6;
+            text-align: left;
+            font-size: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
+
+        .delete-span {
+            position: absolute;
+            top: 2px;
+            right: 8px;
+            color: #448ca6;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 5px 10px;
+            transition: color 0.5s ease;
+            border-radius: 50%; /* Initial border-radius for circular look */
+            display: flex; /* To center content within the circle */
+            align-items: center;
+            justify-content: center;
+            width: 25px; /* Adjust width to ensure a circle */
+            height: 25px; /* Adjust height to ensure a circle */
+        }
+
+        .delete-span:hover {
+            color: #ffffff;
+        }
+
+        .no-task-message {
+            align-items: center; /* Center vertically */
+            width: 400px;
+            background-color: #e8f6fb; 
+            color: #508dbc; 
+            margin: auto;
+            border-radius: 10px;
+            text-align: center; 
+            font-weight: bold;
+        }
+        .heading h1{
+            color: #40556e;
+            font-size: 35px;
+            padding: 5px;
+            border-radius: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2e587d; /* Dark blue text */
+            margin: 5px;
+            margin-left: 10px;
+            padding-right: 50px;
+            min-width: 325px;
+            max-width: 325px;
+            max-height: fit-content;
+            display: flex;
+            word-break: break-word; /* Ensures words break properly to the next line */
+            white-space: normal;
+        }
+
+        .card-content {
+            background-color: #ffffff; /* White background for the content */
+            padding: 5px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+            min-height: 50px;
+        }
+
+        .tag-priority {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tag {
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-left: 10px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            gap: 5px;
+            font-size: 12px;
+            margin-left: 20px;
+            margin-bottom: 5px;
+            justify-content: flex-start;
+            max-width: 300px;
+        }
+
+        .tags-container span{
+            padding: 5px;
+            margin-top: 11px;
+            border-radius: 20px;
+            width: 80px;
+            text-align: center;
+        }
+
+        /* Tag styles */
+        .tag-front-end {
+            background-color: #ffd561; /* Light orange */
+            color: #fff;
+        }
+
+        .tag-back-end {
+            background-color: #66ccff; /* Light blue */
+            color: #fff;
+        }
+
+        .tag-ui {
+            background-color: #ff99cc; /* Light pink */
+            color: #fff;
+        }
+
+        .tag-ux {
+            background-color: #cc99ff; /* Light purple */
+            color: #fff;
+        }
+
+        .tag-database {
+            background-color: #66e91b; /* Lavender */
+            color: #ffffff;
+        }
+
+        .tag-api {
+            background-color: #ff5757; /* Light green */
+            color: #fff;
+        }
+
+        .tag-framework {
+            background-color: #ff914d; /* Peach */
+            color: #fff;
+        }
+
+        .tag-testing {
+            background-color: #5271ff; /* Light red */
+            color: #fff;
+        }
+
+        .tag-default{
+            background-color: #a9acad; /* Light red */
+            color: #fff;
+        }
+
+        .story-points {
+            background-color: #6ec6e6; /* Light blue background */
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+
+        .priority {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .priority-icon {
+            font-size: 12px;
+        }
+
+        .priority-text {
+            color: #40556e;
+            font-weight: bold;
+        }
+
+        .task {
+            position: relative;
+            border: 4px solid #a0c6e6;
+            border-radius: 20px;
+            background-color: #a0c6e6;
+            text-align: left;
+            color: #40556e;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border 0.3s ease, transform 0.3s ease;
+            max-height: fit-content;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .task:hover {
+            background-color: #afdaf7;
+            border: 4px solid #afdaf7;
+            transform: scale(1.02);
+        }
+
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .modal-content p {
+            color: #2e587d;
+            text-align: left;
+            font-weight: bold;
+            padding-right: 20px;
+            margin-right: 20px;
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-button:hover {
+            color: #000;
+        }
+
+        .modal-buttons {
+            margin-top: 10px;
+            margin-right: 20px;
+        }
+
+        .confirm-button, .cancel-button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .confirm-button {
+            background-color: #d9534f;
+            color: white;
+        }
+
+        .cancel-button {
+            background-color: #babdbe;
+            color: white;
+        }
+
+        .confirm-button:hover {
+            background-color: #ca3631;
+        }
+
+        .cancel-button:hover {
+            background-color: #a9acad;
+        }
+        nav a.current{
+            color: #2e587d;
+        }
+
+        /* Custom dropdown container */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Button to toggle the dropdown */
+        .dropdown-button {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            margin-bottom: 18px;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 2px solid #6ec6e6;
+            background-color: #e8f6fb;
+            color: #2e587d;
+        }
+
+        /* Dropdown content (hidden by default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 150px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            z-index: 1;
+            font-size: 15px;
+        }
+
+        /* Show the dropdown on button click */
+        .dropdown-content label {
+            display: block;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        /* Toggle visibility */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .logout-button{
+            background-color: #66ccff;
+            color: #fff;
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            margin-left: 150px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover{
+            background-color: #56a6c4;
+        }
+
+
+    </style>
+</head>
+<body onload="checkAuthentication()">
+    <header>
+        <div class="logo">Scrumble</div>
+        <nav>
+            <a href="overview.html" class = "current"><strong>Product Backlog</strong></a>
+            <a href="sprint_board.html">Sprint Board</a>
+        </nav>
+        <div class="logout-button" onclick="logout()">Log out</div>
+        <div class="user-logo" onclick="redirectToProfile()"></div>
+    </header>
+    <hr>
+    
+
+    <div class="heading">
+        <h1>Product Backlog</h1>
+        <div class="filter-sort">
+            <select id="sortOptions">
+                <option class="select-option" value="all">Sort by All</option>
+                <option class="select-option" value="priorityHighLow">Sort by Low to High Priority</option>
+                <option class="select-option" value="priorityLowHigh">Sort by High to Low Priority</option>
+                <option class="select-option" value="oldest">Sort by Oldest to Newest</option>
+                <option class="select-option" value="newest">Sort by Newest to Oldest</option>
+            </select>       
+            <div class="dropdown">
+                <button class="dropdown-button">Filter by Tags</button>
+                <div class="dropdown-content" id="tagDropdown">
+                    <label><input type="checkbox" value="front-end"> Front-End</label>
+                    <label><input type="checkbox" value="back-end"> Back-End</label>
+                    <label><input type="checkbox" value="ui"> UI</label>
+                    <label><input type="checkbox" value="ux"> UX</label>
+                    <label><input type="checkbox" value="database"> Database</label>
+                    <label><input type="checkbox" value="api"> API</label>
+                    <label><input type="checkbox" value="framework"> Framework</label>
+                    <label><input type="checkbox" value="testing"> Testing</label>
+                </div>
+            </div>     
+        </div>
+    </div>
+
+    <div class="content">
+        <div id="tasksContainer"></div>
+    </div>
+
+    <div class="add-buttons">
+        <button id="createButton"><a href="create_task.html" class="plus-sign">+</a></button>
+        <button id="historyButton"><a href="overall-history.html" class="history-button">H</a></button>
+    </div>
+
+    <!-- Custom Confirmation Popup -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p>Are you sure you want to delete this task?</p>
+            <div class="modal-buttons">
+                <button id="confirmDelete" class="confirm-button">Confirm</button>
+                <button id="cancelDelete" class="cancel-button">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function checkAuthentication() {
+            // Retrieve currentMember from localStorage
+            const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            // If currentMember does not exist or memberId is -1, redirect to index.html
+            if (!currentMember || currentMember.memberId === -1) {
+                window.location.href = 'index.html'; // Redirect to login page
+            }
+        }
+
+        function logout() {
+            // Get the currentMember from localStorage
+            let currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            if (currentMember) {
+                // Update the role and memberId
+                currentMember.role = 'None';
+                currentMember.memberId = -1;
+
+                // Save the updated currentMember back to localStorage
+                localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+                // Redirect to the index.html page (or login page)
+                window.location.href = 'index.html';
+            } else {
+                console.error('No currentMember found in localStorage.');
+            }
+        }
+        function redirectToProfile() {
+            const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+            if (currentMember && currentMember.role) {
+                if (currentMember.role === 'member') {
+                    window.location.href = 'member-profile.html'; // Redirect to member profile
+                } else if (currentMember.role === 'admin') {
+                    window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+                } else {
+                    console.error('Invalid role found for the current member.');
+                }
+            } else {
+                console.error('No current member data found.');
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const deleteModal = document.getElementById('deleteModal');
+            const confirmDeleteButton = document.getElementById('confirmDelete');
+            const cancelDeleteButton = document.getElementById('cancelDelete');
+            const closeButton = document.querySelector('.close-button');
+            const button = document.getElementById('createButton');
+            
+
+            let tempTasks = JSON.parse(localStorage.getItem('product-backlog')) || [];
+
+            if (tempTasks.length <= 6) {
+                button.style.display = 'flex';
+            }
+
+            // Function to display tasks
+            function displayTasks(tasks) {
+                const container = document.getElementById('tasksContainer');
+                container.innerHTML = '';
+
+                if (tasks.length === 0) {
+                    const noTaskMessage = document.createElement('p');
+                    noTaskMessage.textContent = 'No task can be shown';
+                    noTaskMessage.className = 'no-task-message';
+                    container.appendChild(noTaskMessage);
+                    button.style.display = 'flex';
+                    return;
+                }
+
+                tasks.forEach((task) => {
+                    const taskElement = document.createElement('div');
+                    taskElement.className = 'task';
+
+                    let priorityIcon = '';
+                    switch (task.priority?.toLowerCase()) {
+                        case 'urgent':
+                            priorityIcon = '🔴';
+                            break;
+                        case 'important':
+                            priorityIcon = '🟠';
+                            break;
+                        case 'medium':
+                            priorityIcon = '🟡';
+                            break;
+                        case 'low':
+                            priorityIcon = '🟢';
+                            break;
+                        default:
+                            priorityIcon = '⚪';
+                    }
+
+                    const tagContainer = document.createElement('div');
+                    tagContainer.className = 'tags-container';
+
+                    const taskTags = Array.isArray(task.tags) ? task.tags : (task.tags ? [task.tags] : []);
+
+                    if (taskTags.length === 0) {
+                        const tagElement = document.createElement('span');
+                        tagElement.className = 'tag-default';
+                        tagElement.textContent = 'No Tags';
+                        tagContainer.appendChild(tagElement);
+                    } else {
+                        taskTags.forEach(tag => {
+                            let tagClass = '';
+                            switch (tag?.toLowerCase()) {
+                                case 'front-end': tagClass = 'tag-front-end'; break;
+                                case 'back-end': tagClass = 'tag-back-end'; break;
+                                case 'ui': tagClass = 'tag-ui'; break;
+                                case 'ux': tagClass = 'tag-ux'; break;
+                                case 'database': tagClass = 'tag-database'; break;
+                                case 'api': tagClass = 'tag-api'; break;
+                                case 'framework': tagClass = 'tag-framework'; break;
+                                case 'testing': tagClass = 'tag-testing'; break;
+                                default: tagClass = 'tag-default';
+                            }
+
+                            const tagElement = document.createElement('span');
+                            tagElement.className = `${tagClass}`;
+                            tagElement.textContent = tag || 'No Tag';
+                            tagContainer.appendChild(tagElement);
+                        });
+                    }
+
+
+                    taskElement.innerHTML = `
+                        <h2 class="card-title" onclick="window.location.href='task_details.html?taskId=${task.id}'">${task.title}</h2>
+                        <div class="card-content" onclick="window.location.href='task_details.html?taskId=${task.id}'">
+                            <div class="tag-priority">
+                                <span class="story-points">${task.storyPoints || 0} SP</span>
+                            </div>
+                            <div class="priority">
+                                <span class="priority-icon">${priorityIcon}</span>
+                                <span class="priority-text">${task.priority || 'No Priority'} Priority</span>
+                            </div>
+                        </div>
+                    `;
+
+                    // Append the tag container that holds all tags
+                    taskElement.querySelector('.tag-priority').prepend(tagContainer);
+
+                    const span = document.createElement('span');
+                    span.innerHTML = '\u00d7';
+                    span.className = 'delete-span';
+                    span.onclick = () => deleteTask(task.id);
+
+                    taskElement.appendChild(span);
+                    container.appendChild(taskElement);
+                });
+            }
+
+            // Delete Task function with custom popup
+            function deleteTask(taskId) {
+                deleteModal.style.display = 'block';
+
+                confirmDeleteButton.onclick = function () {
+                    const tasks = JSON.parse(localStorage.getItem('product-backlog')) || [];
+                    const updatedTasks = tasks.filter(task => task.id !== taskId);
+                    localStorage.setItem('product-backlog', JSON.stringify(updatedTasks));
+                    tempTasks = updatedTasks; // Update the temporary tasks as well
+                    const tasks2 = JSON.parse(localStorage.getItem('tasks')) || [];
+                    const updatedTasks2 = tasks.filter(task => task.id !== taskId);
+                    localStorage.setItem('tasks', JSON.stringify(updatedTasks2));
+                    tempTasks = updatedTasks;
+                    displayTasks(tempTasks);
+                    deleteModal.style.display = 'none';
+                };
+
+                cancelDeleteButton.onclick = closeButton.onclick = function () {
+                    deleteModal.style.display = 'none';
+                    if (tempTasks.length <= 6) {
+                        button.style.display = 'flex';
+                    }
+                    
+                };
+
+                window.onclick = function (event) {
+                    if (event.target === deleteModal) {
+                        deleteModal.style.display = 'none';
+                    }
+                    if (tempTasks.length <= 6) {
+                        button.style.display = 'flex';
+                    }
+                };
+
+                
+            }
+
+            // Filter tasks based on selected filter option
+            function filterTasks() {
+                const checkboxes = document.querySelectorAll('#tagDropdown input[type="checkbox"]');
+                const selectedTags = Array.from(checkboxes)
+                    .filter(checkbox => checkbox.checked)
+                    .map(checkbox => checkbox.value.toLowerCase());
+
+                // If no tags are selected, return all tasks
+                if (selectedTags.length === 0) {
+                    return tempTasks; // Return all tasks if no tags are selected
+                }
+
+                // Filter tasks based on selected tags
+                const filteredTasks = tempTasks.filter(task => {
+                    const taskTags = Array.isArray(task.tags) ? task.tags.map(tag => tag.toLowerCase()) : [];
+                    return selectedTags.some(tag => taskTags.includes(tag)); // Check if any selected tags match the task tags
+                });
+
+                return filteredTasks; // Return the filtered tasks
+            }
+
+            // Sort tasks based on selected sort option
+            function sortTasks(filteredTasks) {
+                const sortValue = document.getElementById('sortOptions').value;
+
+                if (sortValue === 'all') {
+                    // Display tasks in their original order (no sorting)
+                    displayTasks(filteredTasks);
+                    return;
+                }
+
+                const sortedTasks = filteredTasks.sort((a, b) => {
+                    // Sort by Low to High Priority
+                    if (sortValue === 'priorityLowHigh') {
+                        const priorityOrder = { 'urgent': 1, 'important': 2, 'medium': 3, 'low': 4 };
+                        return (priorityOrder[a.priority?.toLowerCase()] || 5) - (priorityOrder[b.priority?.toLowerCase()] || 5);
+                    }
+
+                    // Sort by High to Low Priority
+                    if (sortValue === 'priorityHighLow') {
+                        const priorityOrder = { 'urgent': 1, 'important': 2, 'medium': 3, 'low': 4 };
+                        return (priorityOrder[b.priority?.toLowerCase()] || 5) - (priorityOrder[a.priority?.toLowerCase()] || 5);
+                    }
+
+                    // Sort by Oldest to Newest (assuming tasks have a 'createdAt' timestamp)
+                    if (sortValue === 'oldest') {
+                        return new Date(a.createdTime) - new Date(b.createdTime);
+                    }
+
+                    // Sort by Newest to Oldest (assuming tasks have a 'createdAt' timestamp)
+                    if (sortValue === 'newest') {
+                        return new Date(b.createdTime) - new Date(a.createdTime);
+                    }
+
+                    return 0; // Default case if no sorting criteria matches
+                });
+
+                displayTasks(sortedTasks);
+            }
+
+
+            // Combined handler for sort and filter
+            function updateTasks() {
+                const filteredTasks = filterTasks();
+                sortTasks(filteredTasks);  // Pass the filtered tasks to be sorted
+                if (tempTasks.length <= 6) {
+                    button.style.display = 'flex';
+                }
+            }
+
+
+            // Event listeners for sort and filter
+            document.getElementById('sortOptions').addEventListener('change', updateTasks);
+            document.querySelectorAll('#tagDropdown input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', updateTasks); // Call filterTasks on checkbox change
+            });
+
+            // Initial display of tasks
+            displayTasks(tempTasks);
+            
+        });
+
+
+    </script>
+</body>
+</html>

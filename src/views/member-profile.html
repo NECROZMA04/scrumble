@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrumble</title>
+    <link rel="icon" href="tab-logo.png" type="png">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+        @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+
+        body {
+            font-family: 'Futura', sans-serif; 
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #6ec6e6;
+            padding-left: 5rem;
+            padding-right: 5rem;
+            padding-top: 1.5rem;
+        }
+
+        header {
+            font-family: "Bukhari Script", cursive; 
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #6ec6e6;
+            padding-bottom: 1rem;
+            position: relative;
+        }
+
+        nav {
+            display: flex;
+            gap: 5.0rem;
+        }
+
+        nav a {
+            font-family: 'Futura', sans-serif;
+            color: #6f85a6;
+            text-decoration: none;
+            font-size: 23px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #6ec6e6;
+        }
+
+        .user-logo {
+            width: 50px;
+            height: 50px;
+            background-image: url('user-icon.png'); 
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: none;
+            transition: color 0.3s;
+        }
+
+        .user-logo:hover {
+            color: #6ec6e6;
+        }
+
+        hr {
+            height: 4px;
+            background-color: #6ec6e6;
+            border-color: #6ec6e6;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .content {
+            padding: 2rem;
+            text-align: left; 
+        }
+
+        .content label{
+            margin-top: 10px;
+        }
+
+        form {
+            margin-top: 2rem;
+        }
+
+        label {
+            font-size: 18px;
+            color: #6f85a6;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .name{
+            width: 100%;
+            color: black;
+            padding: 0.5rem;
+            font-size: 56px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            box-sizing: border-box;
+        }
+
+        .email{
+            width: 100%;
+            padding: 0.5rem;
+            color: #40556e;
+            font-size: 20px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            box-sizing: border-box;
+        }
+
+        .username{
+            width: 100%;
+            padding: 0.5rem;
+            color: #40556e;
+            font-size: 20px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            box-sizing: border-box;
+        }
+
+        .button{
+            background-color: #6ec6e6;
+            color: #ffffff;
+            padding: 0.75rem 2rem;
+            margin-top: 20px;
+            font-size: 15px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #5ca7c5;
+        }
+        .logout-button{
+            background-color: #66ccff;
+            color: #fff;
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            margin-left: 150px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover{
+            background-color: #56a6c4;
+        }
+
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body onload="checkAuthentication()">
+    <header>
+        <div class="logo">Scrumble</div>
+        <nav>
+            <a href="overview.html">Product Backlog</a>
+            <a href="sprint_board.html">Sprint Board</a>
+        </nav>
+        <div class="logout-button" onclick="logout()">Log out</div>
+        <div class="user-logo" onclick="redirectToProfile()"></div>
+    </header>
+    <hr>
+    <div class="content">
+
+        <form>
+            <label for="name">Name:</label>
+            <span class="name">User</span>
+
+            <label for="username">Username:</label>
+            <span class="username">user1234</span>
+
+            <label for="email">Email:</label>
+            <span class="email">user@monash.edu</span>
+
+            
+        </form>
+        <button class="button" type="button" id="change-password">Change Password</button>
+    </div>
+
+</body>
+<script>
+
+    function checkAuthentication() {
+        // Retrieve currentMember from localStorage
+        const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+        // If currentMember does not exist or memberId is -1, redirect to index.html
+        if (!currentMember || currentMember.memberId === -1) {
+            window.location.href = 'index.html'; // Redirect to login page
+        }
+    }
+
+    function logout() {
+        // Get the currentMember from localStorage
+        let currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+        if (currentMember) {
+            // Update the role and memberId
+            currentMember.role = 'None';
+            currentMember.memberId = -1;
+
+            // Save the updated currentMember back to localStorage
+            localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+            // Redirect to the index.html page (or login page)
+            window.location.href = 'index.html';
+        } else {
+            console.error('No currentMember found in localStorage.');
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        // Retrieve currentMember from localStorage
+        const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+        const memberId = currentMember ? currentMember.memberId : null;
+
+        if (memberId) {
+            // Retrieve users from localStorage
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            // Find the user that matches the memberId
+            const user = users.find(u => u.id === memberId);
+
+            if (user) {
+                // Populate the form with user details
+                document.querySelector('.name').textContent = `${user.firstName} ${user.lastName}`;
+                document.querySelector('.email').textContent = user.email;
+                document.querySelector('.username').textContent = user.username;
+            } else {
+                console.error('User not found');
+            }
+        } else {
+            console.error('Current member not found');
+        }
+
+        const changePasswordButton = document.getElementById('change-password');
+        if (changePasswordButton) {
+            changePasswordButton.addEventListener('click', function () {
+                if (memberId) {
+                    // Redirect to the change-password page with memberId as a query parameter
+                    window.location.href = `change-password.html?memberId=${memberId}`;
+                } else {
+                    console.error('No memberId found in localStorage.');
+                }
+            });
+        }
+    });
+
+    function redirectToProfile() {
+        const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+        if (currentMember && currentMember.role) {
+            if (currentMember.role === 'member') {
+                window.location.href = 'member-profile.html'; // Redirect to member profile
+            } else if (currentMember.role === 'admin') {
+                window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+            } else {
+                console.error('Invalid role found for the current member.');
+            }
+        } else {
+            console.error('No current member data found.');
+        }
+    }
+</script>
+
+</html>

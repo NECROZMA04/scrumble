@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrumble</title>
+    <link rel="icon" href="tab-logo.png" type="png">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+        @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+
+        body {
+            font-family: 'Futura', sans-serif; 
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #6ec6e6;
+            padding-left: 5rem;
+            padding-right: 5rem;
+            padding-top: 1.5rem;
+            min-height: 100%;
+            overflow: auto;
+        }
+
+        body::-webkit-scrollbar {
+            width: 0; /* Remove scrollbar width */
+            height: 0; /* Remove scrollbar height for horizontal scroll */
+        }
+
+        header {
+            font-family: "Bukhari Script", cursive; 
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #6ec6e6;
+            padding-bottom: 1rem;
+            position: relative;
+        }
+
+        nav {
+            display: flex;
+            gap: 5.0rem;
+        }
+
+        nav a {
+            font-family: 'Futura', sans-serif;
+            color: #6f85a6;
+            text-decoration: none;
+            font-size: 23px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #6ec6e6;
+        }
+
+        .user-logo {
+            width: 50px;
+            height: 50px;
+            background-image: url('user-icon.png'); 
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s,transform 0.2s ease;
+        }
+
+        .user-logo:hover {
+            color: #6ec6e6;
+            transform: scale(1.05);
+        }
+
+        hr {
+            height: 4px;
+            background-color: #6ec6e6;
+            border-color: #6ec6e6;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .content {
+            padding: 0.5rem 2rem;
+            text-align: center;
+        }
+
+        #tasksContainer {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            gap: 20px;
+            max-width: 100%;
+            justify-content: flex-start;
+        }
+
+        .task h2 {
+            margin-left: 10px;
+            font-size: 20px;
+            color: #40556e;
+            flex-wrap: wrap; /* Allows the text to wrap within the element */
+            white-space: normal; /* Allows text to break and wrap normally */
+            overflow-wrap: break-word; /* Ensures long words break to prevent overflow */
+            word-wrap: break-word; 
+        }
+
+        .task p {
+            margin-top: 2px;
+            margin-left: 20px;
+            font-size: 15px;
+        }
+
+        
+        .add-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            padding: 20px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .add-buttons button {
+            background-color: transparent;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            position: fixed;
+            right: 150px;
+            bottom: 60px;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .add-buttons button:hover {
+            transform: scale(1.02);
+        }
+
+        .add-buttons .plus-sign {
+            background-color: #c0c0c0;
+            color: white;
+            border-radius: 20px;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            position: absolute;
+            min-width: 100px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.5s ease;
+        }
+
+        .add-buttons .plus-sign:hover {
+            background-color: #6ec6e6;
+        }
+        .heading {
+            font-family: 'Futura', sans-serif;
+            color: #6ec6e6;
+            text-align: left;
+            font-size: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            flex-wrap: wrap;
+            flex-direction: row;
+        }
+
+        .confirm-span {
+            position: absolute;
+            top: 2px;
+            right: 8px;
+            color: #448ca6;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            margin: 5px 10px;
+            transition: color 0.5s ease, background-color 0.5s ease;
+            border-radius: 50%; /* Initial border-radius for circular look */
+            display: flex; /* To center content within the circle */
+            align-items: center;
+            justify-content: center;
+            width: 30px; /* Adjust width to ensure a circle */
+            height: 30px; /* Adjust height to ensure a circle */
+        }
+
+        .confirm-span:hover {
+            color: #ffffff;
+            background-color: #6f85a6;
+        }
+
+        .no-task-message {
+            align-items: center; /* Center vertically */
+            width: 400px;
+            background-color: #e8f6fb; 
+            color: #508dbc; 
+            margin: auto;
+            border-radius: 10px;
+            text-align: center; 
+            font-weight: bold;
+        }
+        .heading h1{
+            color: #40556e;
+            font-size: 35px;
+            padding: 5px;
+            border-radius: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2e587d; /* Dark blue text */
+            margin: 5px;
+            margin-left: 10px;
+            padding-right: 50px;
+            min-width: 325px;
+            max-width: 325px;
+            max-height: fit-content;
+            display: flex;
+            word-break: break-word; /* Ensures words break properly to the next line */
+            white-space: normal;
+        }
+
+        .card-content {
+            background-color: #ffffff; /* White background for the content */
+            padding: 5px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+            min-height: 50px;
+        }
+
+        .tag-priority {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tag {
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-left: 10px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            gap: 5px;
+            font-size: 12px;
+            margin-left: 20px;
+            margin-bottom: 5px;
+            justify-content: flex-start;
+            max-width: 300px;
+        }
+
+        .tags-container span{
+            padding: 5px;
+            margin-top: 11px;
+            border-radius: 20px;
+            width: 80px;
+            text-align: center;
+        }
+
+
+        /* Tag styles */
+        .tag-front-end {
+            background-color: #ffd561; /* Light orange */
+            color: #fff;
+        }
+
+        .tag-back-end {
+            background-color: #66ccff; /* Light blue */
+            color: #fff;
+        }
+
+        .tag-ui {
+            background-color: #ff99cc; /* Light pink */
+            color: #fff;
+        }
+
+        .tag-ux {
+            background-color: #cc99ff; /* Light purple */
+            color: #fff;
+        }
+
+        .tag-database {
+            background-color: #66e91b; /* Lavender */
+            color: #ffffff;
+        }
+
+        .tag-api {
+            background-color: #ff5757; /* Light green */
+            color: #fff;
+        }
+
+        .tag-framework {
+            background-color: #ff914d; /* Peach */
+            color: #fff;
+        }
+
+        .tag-testing {
+            background-color: #5271ff; /* Light red */
+            color: #fff;
+        }
+
+        .tag-default{
+            background-color: #a9acad; /* Light red */
+            color: #fff;
+        }
+
+        .story-points {
+            background-color: #6ec6e6; /* Light blue background */
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+
+        .priority {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .priority-icon {
+            font-size: 12px;
+        }
+
+        .priority-text {
+            color: #40556e;
+            font-weight: bold;
+        }
+
+        .task {
+            position: relative;
+            border: 4px solid #a0c6e6;
+            border-radius: 20px;
+            background-color: #a0c6e6;
+            text-align: left;
+            color: #40556e;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border 0.3s ease, transform 0.3s ease;
+            max-height: fit-content;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .modal-content p {
+            color: #2e587d;
+            text-align: left;
+            font-weight: bold;
+            padding-right: 20px;
+            margin-right: 20px;
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-button:hover {
+            color: #000;
+        }
+
+        .modal-buttons {
+            margin-top: 10px;
+            margin-right: 20px;
+        }
+
+        .confirm-button, .cancel-button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .confirm-button {
+            background-color: #d9534f;
+            color: white;
+        }
+
+        .cancel-button {
+            background-color: #babdbe;
+            color: white;
+        }
+
+        .confirm-button:hover {
+            background-color: #ca3631;
+        }
+
+        .cancel-button:hover {
+            background-color: #a9acad;
+        }
+        nav a.current{
+            color: #2e587d;
+        }
+
+
+        .logout-button{
+            background-color: #66ccff;
+            color: #fff;
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            margin-left: 150px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover{
+            background-color: #56a6c4;
+        }
+
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body onload="checkAuthentication()">
+    <header>
+        <div class="logo">Scrumble</div>
+        <nav>
+            <a href="overview.html">Product Backlog</a>
+            <a href="sprint_board.html">Sprint Board</a>
+        </nav>
+        <div class="logout-button" onclick="logout()">Log out</div>
+        <div class="user-logo" onclick="redirectToProfile()"></div>
+    </header>
+    <hr>
+    
+
+    <div class="heading">
+        <h1>Task Selection</h1>
+    </div>
+
+    <div class="content">
+        <div id="tasksContainer"></div>
+    </div>
+
+    <div class="add-buttons">
+        <button id="createButton" ><a class="plus-sign" onclick="finishSelection()">Save Changes</a></button>
+    </div>
+
+
+    <script>
+        function checkAuthentication() {
+            // Retrieve currentMember from localStorage
+            const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            // If currentMember does not exist or memberId is -1, redirect to index.html
+            if (!currentMember || currentMember.memberId === -1) {
+                window.location.href = 'index.html'; // Redirect to login page
+            }
+        }
+
+        function logout() {
+            // Get the currentMember from localStorage
+            let currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            if (currentMember) {
+                // Update the role and memberId
+                currentMember.role = 'None';
+                currentMember.memberId = -1;
+
+                // Save the updated currentMember back to localStorage
+                localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+                // Redirect to the index.html page (or login page)
+                window.location.href = 'index.html';
+            } else {
+                console.error('No currentMember found in localStorage.');
+            }
+        }
+        const button = document.getElementById('createButton');
+        let originalTasks = JSON.parse(localStorage.getItem('product-backlog')) || []; // Original tasks from local storage
+        let tempTasks = [...originalTasks]; // Clone original tasks to temp list
+        let selectedTaskList = [];
+
+        document.addEventListener("DOMContentLoaded", function () {
+            if (tempTasks.length <= 6) {
+                button.style.display = 'flex';
+            }
+
+            // Function to display tasks
+            function displayTasks(tasks) {
+                const container = document.getElementById('tasksContainer');
+                container.innerHTML = '';
+
+                if (tasks.length === 0) {
+                    const noTaskMessage = document.createElement('p');
+                    noTaskMessage.textContent = 'No task can be shown';
+                    noTaskMessage.className = 'no-task-message';
+                    container.appendChild(noTaskMessage);
+                    button.style.display = 'flex';
+                    return;
+                }
+
+                tasks.forEach((task) => {
+                    const taskElement = document.createElement('div');
+                    taskElement.className = 'task';
+                    taskElement.setAttribute('data-task-id', task.id);
+
+                    let priorityIcon = '';
+                    switch (task.priority?.toLowerCase()) {
+                        case 'urgent':
+                            priorityIcon = '🔴';
+                            break;
+                        case 'important':
+                            priorityIcon = '🟠';
+                            break;
+                        case 'medium':
+                            priorityIcon = '🟡';
+                            break;
+                        case 'low':
+                            priorityIcon = '🟢';
+                            break;
+                        default:
+                            priorityIcon = '⚪';
+                    }
+
+                    const tagContainer = document.createElement('div');
+                    tagContainer.className = 'tags-container';
+
+                    const taskTags = Array.isArray(task.tags) ? task.tags : (task.tags ? [task.tags] : []);
+                    if (taskTags.length === 0) {
+                        const tagElement = document.createElement('span');
+                        tagElement.className = 'tag-default';
+                        tagElement.textContent = 'No Tags';
+                        tagContainer.appendChild(tagElement);
+                    } else {
+                        taskTags.forEach(tag => {
+                            let tagClass = '';
+                            switch (tag?.toLowerCase()) {
+                                case 'front-end': tagClass = 'tag-front-end'; break;
+                                case 'back-end': tagClass = 'tag-back-end'; break;
+                                case 'ui': tagClass = 'tag-ui'; break;
+                                case 'ux': tagClass = 'tag-ux'; break;
+                                case 'database': tagClass = 'tag-database'; break;
+                                case 'api': tagClass = 'tag-api'; break;
+                                case 'framework': tagClass = 'tag-framework'; break;
+                                case 'testing': tagClass = 'tag-testing'; break;
+                                default: tagClass = 'tag-default';
+                            }
+
+                            const tagElement = document.createElement('span');
+                            tagElement.className = `${tagClass}`;
+                            tagElement.textContent = tag || 'No Tag';
+                            tagContainer.appendChild(tagElement);
+                        });
+                    }
+
+                    taskElement.innerHTML = `
+                        <h2 class="card-title">${task.title}</h2>
+                        <div class="card-content">
+                            <div class="tag-priority">
+                                <span class="story-points">${task.storyPoints || 0} SP</span>
+                            </div>
+                            <div class="priority">
+                                <span class="priority-icon">${priorityIcon}</span>
+                                <span class="priority-text">${task.priority || 'No Priority'} Priority</span>
+                            </div>
+                        </div>
+                    `;
+
+                    taskElement.querySelector('.tag-priority').prepend(tagContainer);
+
+                    const span = document.createElement('span');
+                    span.innerHTML = '✓';
+                    span.className = 'confirm-span';
+                    span.onclick = () => toggleTaskSelection(taskElement, task.id);
+
+                    taskElement.appendChild(span);
+                    container.appendChild(taskElement);
+                });
+            }
+
+            function toggleTaskSelection(taskElement, taskId) {
+                const taskIndex = tempTasks.findIndex(task => task.id === taskId);
+                if (taskIndex !== -1) {
+                    // Remove task from tempTasks and add to selectedTaskList
+                    const selectedTask = tempTasks.splice(taskIndex, 1)[0];
+                    selectedTaskList.push(selectedTask);
+
+                    // Update task display
+                    displayTasks(tempTasks);
+                }
+            }
+            
+            displayTasks(tempTasks);
+        });
+
+        function finishSelection() {
+            // Update original tasks in localStorage, excluding the selected tasks
+            localStorage.setItem('product-backlog', JSON.stringify(tempTasks));
+
+            let selectedTasks = JSON.parse(localStorage.getItem('selectedTasks')) || [];
+
+            // Push each task from `selectedTaskList` into the `selectedTasks` array
+            selectedTaskList.forEach(task => {
+                selectedTasks.push(task);
+            });
+
+            // Update localStorage with the modified `selectedTasks` array
+            localStorage.setItem('selectedTasks', JSON.stringify(selectedTasks));
+
+            // Navigate back to the previous page
+            window.history.back();
+        }
+
+        function redirectToProfile() {
+            const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+            if (currentMember && currentMember.role) {
+                if (currentMember.role === 'member') {
+                    window.location.href = 'member-profile.html'; // Redirect to member profile
+                } else if (currentMember.role === 'admin') {
+                    window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+                } else {
+                    console.error('Invalid role found for the current member.');
+                }
+            } else {
+                console.error('No current member data found.');
+            }
+        }
+
+    </script>
+</body>
+</html>

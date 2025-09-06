@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Scrumble</title>
+        <link rel="icon" href="tab-logo.png" type="png">
+        <style>
+            @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+            @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+    
+            body {
+                font-family: 'Futura', sans-serif;
+                line-height: 1.6;
+                background-color: #ffffff;
+                color: #6ec6e6;
+                padding-left: 5rem;
+                padding-right: 5rem;
+                padding-top: 1.5rem;
+            }
+
+            body::-webkit-scrollbar {
+                width: 0; /* Remove scrollbar width */
+                height: 0; /* Remove scrollbar height for horizontal scroll */
+            }
+    
+            header {
+                font-family: "Bukhari Script", cursive;
+                font-size: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                color: #6ec6e6;
+                padding-bottom: 1rem;
+                position: relative;
+            }
+    
+            nav {
+                display: flex;
+                gap: 5.0rem;
+            }
+    
+            nav a {
+                font-family: 'Futura', sans-serif;
+                color: #6f85a6;
+                text-decoration: none;
+                font-size: 23px;
+                transition: color 0.3s;
+            }
+    
+            nav a:hover {
+                color: #6ec6e6;
+            }
+    
+            .user-logo {
+                width: 50px;
+                height: 50px;
+                background-image: url('user-icon.png');
+                background-size: cover;
+                background-position: center;
+                border-radius: 50%;
+                border: none;
+                transition: color 0.3s;
+            }
+    
+            .user-logo:hover {
+                color: #6ec6e6;
+            }
+    
+            hr {
+                height: 4px;
+                background-color: #6ec6e6;
+                border-color: #6ec6e6;
+                border: none;
+                border-radius: 20px;
+            }
+            .user-logo {
+                width: 50px;
+                height: 50px;
+                background-image: url('user-icon.png'); 
+                background-size: cover;
+                background-position: center;
+                border-radius: 50%;
+                border: none;
+                cursor: pointer;
+                transition: color 0.3s,transform 0.2s ease;
+            }
+    
+            .content {
+                display: flex;
+                flex-direction: column;
+                padding-top: 15px;
+                border-radius: 8px;
+                background-color: #ffffff;
+            }
+    
+            .task-header {
+                display: flex;
+                margin-bottom: 1rem;
+                flex-direction: row; /* Stack elements vertically */
+                position: relative; /* For positioning children */
+            }
+    
+            .task-header h2 {
+                font-size: 30px;
+                color: #5a5959;
+                font-family: 'Trebuchet MS', sans-serif;
+                margin: 0;
+                max-width: 60%;
+                overflow-wrap: break-word; /* Ensures long words break to fit within the container */
+                word-wrap: break-word; /* Alternative for older browsers */
+                word-break: normal; /* Forces word to break at any character to fit */
+                white-space: normal; /* Allows text to wrap onto the next line */
+                
+                display: block;
+            }
+            .sprint-name-input {
+                width: 100%;
+                padding: 15px;
+                margin-bottom: 20px;
+                color: #2c5a80;
+                background-color: #e8f6fb;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+            }
+
+            .form-section {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+            }
+
+            .date-section {
+                width: 40%;
+            }
+
+            .date-section label {
+                display: block;
+                margin-bottom: 5px;
+                color: #2e3a59;
+            }
+
+            .date-section input {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 15px;
+                border: none;
+                background-color: #e8f6fb;
+                color: #8baac4;
+                border-radius: 8px;
+                font-size: 14px;
+            }
+
+            .task-section {
+                width: 55%;
+            }
+
+            .task-section label {
+                display: block;
+                margin-bottom: 10px;
+                color: #2e3a59;
+                font-size: 18px;
+            }
+
+            .task-item {
+                position: relative;
+                border: 4px solid #c7e6f5;
+                border-radius: 20px;
+                background-color: #c7e6f5;
+                text-align: left;
+                color: #40556e;
+                transition: background-color 0.3s ease, border 0.3s ease, transform 0.3s ease;
+                max-height: fit-content;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .task-item ul {
+                list-style-type: none;
+            }
+
+            .task-item ul li {
+                font-size: 14px;
+                color: #2e3a59;
+            }
+
+            .priority {
+                padding: 3px 10px;
+                border-radius: 15px;
+                font-size: 12px;
+                font-weight: bold;
+                margin-left: 10px;
+            }
+
+            .low {
+                background-color: #d5f2e3;
+                color: #38a169;
+            }
+
+            .high {
+                background-color: #ffd9d9;
+                color: #e53e3e;
+            }
+
+            .remove-task {
+                position: absolute;
+                top: 5px;
+                right: 30px;
+                cursor: pointer;
+                color: #96a4b4;
+                font-size: 16px;
+            }
+
+            .add-task {
+                display: block;
+                width: 30px;
+                height: 30px;
+                font-size: 18px;
+                color: white;
+                background-color: #6ec6e6;
+                border: none;
+                border-radius: 50%;
+                margin: 10px 0;
+                cursor: pointer;
+            }
+
+            .create-sprint-btn:hover,
+            .cancel-sprint-btn:hover {
+                background-color: #5db1cf;
+            }
+
+            .cancel-sprint-btn {
+                background-color: #ff6b6b;
+            }
+
+            .container::after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+            .sprint-name-input, .date-section input {
+                width: 100%;
+                padding: 15px;
+                margin-bottom: 20px;
+                border-radius: 8px;
+                font-size: 16px;
+                background-color: #e8f6fb; 
+            }
+
+            .sprint-name-input::placeholder, .date-section input::placeholder {
+                color: #8baac4; 
+            }
+            .sprint-name-input:focus, .date-section input:focus {
+                outline: none; 
+                border: none; 
+                background-color: #e8f6fb; 
+            }
+
+            .content label{
+                font-weight: bold;
+                color: #5a5959;
+                margin-bottom: 10px;
+            }
+
+            .content h1{
+                font-size: 23px;
+                color: #5a5959;
+                margin-bottom: 10px;
+            }
+
+            .add-buttons {
+                display: flex;
+                justify-content: flex-end;
+                gap: 20px; 
+                padding: 20px;
+                margin-top: 20px;
+            }
+
+            .add-buttons button {
+                border-radius: 10px;
+                padding: 10px 20px;
+                font-size: 16px;
+                color: white;
+                cursor: pointer;
+                border: none;
+                transition: background-color 0.3s ease;
+            }
+            .create-sprint-btn {
+                background-color: #6ec6e6;
+            }
+            .create-sprint-btn:hover {
+                background-color: #5db1cf;
+            }
+
+            .cancel-sprint-btn {
+                background-color: #bebebe;
+            }
+            .cancel-sprint-btn:hover {
+                background-color: #ff7f7f;
+            }
+
+            .task {
+                position: relative;
+                border: 4px solid #a0c6e6;
+                border-radius: 20px;
+                background-color: #a0c6e6;
+                text-align: left;
+                color: #40556e;
+                transition: background-color 0.3s ease, border 0.3s ease, transform 0.3s ease;
+                max-height: fit-content;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .card-title {
+                font-size: 18px;
+                font-weight: bold;
+                color: #2e587d; /* Dark blue text */
+                margin: 5px;
+                margin-left: 10px;
+                padding-right: 50px;
+                min-width: 500px;
+                max-width: 500px;
+                max-height: fit-content;
+                display: flex;
+                word-break: break-word; /* Ensures words break properly to the next line */
+                white-space: normal;
+            }
+
+            .card-content {
+                background-color: #ffffff; /* White background for the content */
+                padding: 5px;
+                border-radius: 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                flex-grow: 1;
+                min-height: 50px;
+            }
+
+            .tag-priority {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .tag {
+                color: #fff;
+                padding: 5px 10px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: bold;
+                margin-top: 10px;
+                margin-left: 10px;
+                min-width: 100px;
+                text-align: center;
+            }
+
+            .tags-container {
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: row;
+                gap: 5px;
+                font-size: 12px;
+                margin-left: 20px;
+                margin-bottom: 5px;
+                justify-content: flex-start;
+                max-width: 300px;
+            }
+
+            .tags-container span{
+                padding: 5px;
+                margin-top: 11px;
+                border-radius: 20px;
+                width: 80px;
+                text-align: center;
+            }
+
+            /* Tag styles */
+            .tag-front-end {
+                background-color: #ffd561; /* Light orange */
+                color: #fff;
+            }
+
+            .tag-back-end {
+                background-color: #66ccff; /* Light blue */
+                color: #fff;
+            }
+
+            .tag-ui {
+                background-color: #ff99cc; /* Light pink */
+                color: #fff;
+            }
+
+            .tag-ux {
+                background-color: #cc99ff; /* Light purple */
+                color: #fff;
+            }
+
+            .tag-database {
+                background-color: #66e91b; /* Lavender */
+                color: #ffffff;
+            }
+
+            .tag-api {
+                background-color: #ff5757; /* Light green */
+                color: #fff;
+            }
+
+            .tag-framework {
+                background-color: #ff914d; /* Peach */
+                color: #fff;
+            }
+
+            .tag-testing {
+                background-color: #5271ff; /* Light red */
+                color: #fff;
+            }
+
+            .tag-default{
+                background-color: #a9acad; /* Light red */
+                color: #fff;
+            }
+
+            .story-points {
+                background-color: #6ec6e6; /* Light blue background */
+                color: #fff;
+                padding: 5px 10px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: bold;
+                margin-right: 10px;
+                margin-top: 10px;
+            }
+
+            #task-list{
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: row;
+                gap: 20px;
+                max-width: 100%;
+                justify-content: flex-start;
+            }
+
+            .task-item{
+                margin-left: 10px;
+                font-size: 20px;
+                color: #40556e;
+                flex-wrap: wrap; /* Allows the text to wrap within the element */
+                white-space: normal; /* Allows text to break and wrap normally */
+                overflow-wrap: break-word; /* Ensures long words break to prevent overflow */
+                word-wrap: break-word; 
+            }
+
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; 
+                z-index: 1; 
+                left: 0;
+                top: 0;
+                width: 100%; 
+                height: 100%; 
+                background-color: rgba(0, 0, 0, 0.45); /* Semi-transparent background */
+                
+            }
+
+            /* Modal content box */
+            .modal-content {
+                color: #7d848d;
+                background-color: #fff;
+                margin: 15% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%; 
+                max-width: 400px;
+                text-align: center;
+                border-radius: 20px;
+            }
+
+            /* Close button (X) */
+            .close {
+                color: #cccccc;
+                float: right;
+                top: 5px;
+                font-size: 20px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .close:hover, .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            /* Modal OK button */
+            .modal-ok-btn {
+                background-color: #6ec6e6;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+
+            .modal-ok-btn:hover {
+                background-color: #5db1cf;
+            }
+            .logout-button{
+                background-color: #66ccff;
+                color: #fff;
+                font-size: 20px;
+                padding: 5px 10px;
+                border-radius: 20px;
+                display: flex;
+                margin-left: 150px;
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .logout-button:hover{
+                background-color: #56a6c4;
+            }
+
+
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+    <body onload="checkAuthentication()">
+        <header>
+            <div class="logo">Scrumble</div>
+            <nav>
+                <a href="overview.html">Product Backlog</a>
+                <a href="sprint_board.html">Sprint Board</a>
+            </nav>
+            <div class="logout-button" onclick="logout()">Log out</div>
+            <div class="user-logo" onclick="redirectToProfile()"></div>
+        </header>
+        <hr>
+    
+
+        <div class="content">
+        <!-- Task header -->
+            <div class="task-header">
+                <h2>Edit Sprint</h2>
+            </div>
+            <h1>Sprint Name</h1>
+            <input type="text" placeholder="Enter your Sprint Name here..." class="sprint-name-input" id="sprint-name">
+
+            <div class="form-section">
+                <div class="date-section">
+                    <label for="start-date">Start Date</label>
+                    <input type="date" id="start-date" placeholder="Enter your Start Date here...(DD/MM/YYYY)">
+                    
+                    <label for="end-date">End Date</label>
+                    <input type="date" id="end-date" placeholder="Enter your End Date here...(DD/MM/YYYY)">
+                </div>
+
+                <div class="task-section">
+                    <label>Task Selection</label>
+                    <!-- Container for function to display task here -->
+                    <div id="task-list"></div>
+                    <button class="add-task" onclick="addTask()">+</button>
+                </div>
+            </div>
+            <div class="add-buttons">
+                <button class="create-sprint-btn" id="create_sprint-btn">Done</button>
+                <button class="cancel-sprint-btn" id="cancel-sprint-btn" onclick="window.location.href ='sprint_board.html'">Back</button>
+            </div>
+
+            <div id="popupModal" class="modal">
+                <div class="modal-content">
+                    <span id="closeModal" class="close">&times;</span>
+                    <p id="modalMessage"></p>
+                    <button id="modalOkButton" class="modal-ok-btn">OK</button>
+                </div>
+            </div>
+            
+        </div>
+        <script>
+            function checkAuthentication() {
+                // Retrieve currentMember from localStorage
+                const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+                // If currentMember does not exist or memberId is -1, redirect to index.html
+                if (!currentMember || currentMember.memberId === -1) {
+                    window.location.href = 'index.html'; // Redirect to login page
+                }
+            }
+
+            function logout() {
+                // Get the currentMember from localStorage
+                let currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+                if (currentMember) {
+                    // Update the role and memberId
+                    currentMember.role = 'None';
+                    currentMember.memberId = -1;
+
+                    // Save the updated currentMember back to localStorage
+                    localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+                    // Redirect to the index.html page (or login page)
+                    window.location.href = 'index.html';
+                } else {
+                    console.error('No currentMember found in localStorage.');
+                }
+            }
+            document.getElementById('cancel-sprint-btn').addEventListener('DOMContentLoaded', function() {
+                localStorage.setItem('selectedTasks', JSON.stringify([]));
+            });
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const sprintId = urlParams.get('sprintId');
+            const sprints = JSON.parse(localStorage.getItem('sprints')) || [];
+            const sprintData = sprints.find(sprint => sprint.id === sprintId);
+
+            document.addEventListener('DOMContentLoaded', function() {
+                checkAuthentication();
+                const urlParams = new URLSearchParams(window.location.search);
+                const sprintId = urlParams.get('sprintId');
+                const sprints = JSON.parse(localStorage.getItem('sprints')) || [];
+                const sprintData = sprints.find(sprint => sprint.id === sprintId);
+
+                if (sprintData) {
+                    // Populate the fields with the existing sprint data
+                    document.getElementById('sprint-name').value = sprintData.name || '';
+                    document.getElementById('start-date').value = sprintData.startDate || '';
+                    document.getElementById('end-date').value = sprintData.endDate || '';
+
+                    let selectedTasks = sprintData.tasks || [];
+                    let originalTasks = [...selectedTasks]; // Save the original state for cancel behavior
+
+                    // Check if new tasks were selected from task-select.html
+                    let newlySelectedTasks = JSON.parse(localStorage.getItem('selectedTasks')) || [];
+
+                    // Merge newly selected tasks with existing ones
+                    newlySelectedTasks.forEach(task => {
+                        if (!selectedTasks.find(t => t.id === task.id)) {
+                            selectedTasks.push(task); // Avoid duplicates
+                        }
+                    });
+
+                    sprintData.tasks = selectedTasks;
+                    localStorage.setItem('sprints',JSON.stringify(sprints))
+                    localStorage.setItem('selectedTasks', JSON.stringify([]));
+
+                    // Function to render tasks in the task list
+                    function renderTasks() {
+                        const taskListContainer = document.getElementById('task-list');
+                        taskListContainer.innerHTML = ''; // Clear the container first
+
+                        selectedTasks.forEach((task, index) => {
+                            const taskItem = document.createElement('div');
+                            taskItem.classList.add('task-item');
+
+                            let priorityIcon = '';
+                            switch (task.priority?.toLowerCase()) {
+                                case 'urgent':
+                                    priorityIcon = '🔴';
+                                    break;
+                                case 'important':
+                                    priorityIcon = '🟠';
+                                    break;
+                                case 'medium':
+                                    priorityIcon = '🟡';
+                                    break;
+                                case 'low':
+                                    priorityIcon = '🟢';
+                                    break;
+                                default:
+                                    priorityIcon = '⚪';
+                            }
+
+                            const tagContainer = document.createElement('div');
+                            tagContainer.className = 'tags-container';
+
+                            const taskTags = Array.isArray(task.tags) ? task.tags : (task.tags ? [task.tags] : []);
+
+                            if (taskTags.length === 0) {
+                                const tagElement = document.createElement('span');
+                                tagElement.className = 'tag-default';
+                                tagElement.textContent = 'No Tags';
+                                tagContainer.appendChild(tagElement);
+                            } else {
+                                taskTags.forEach(tag => {
+                                    let tagClass = '';
+                                    switch (tag?.toLowerCase()) {
+                                        case 'front-end': tagClass = 'tag-front-end'; break;
+                                        case 'back-end': tagClass = 'tag-back-end'; break;
+                                        case 'ui': tagClass = 'tag-ui'; break;
+                                        case 'ux': tagClass = 'tag-ux'; break;
+                                        case 'database': tagClass = 'tag-database'; break;
+                                        case 'api': tagClass = 'tag-api'; break;
+                                        case 'framework': tagClass = 'tag-framework'; break;
+                                        case 'testing': tagClass = 'tag-testing'; break;
+                                        default: tagClass = 'tag-default';
+                                    }
+
+                                    const tagElement = document.createElement('span');
+                                    tagElement.className = `${tagClass}`;
+                                    tagElement.textContent = tag || 'No Tag';
+                                    tagContainer.appendChild(tagElement);
+                                });
+                            }
+
+                            taskItem.innerHTML = `
+                                <h2 class="card-title">${task.title}</h2>
+                                <div class="card-content">
+                                    <div class="tag-priority">
+                                        <span class="story-points">${task.storyPoints || 0} SP</span>
+                                    </div>
+                                    <div class="priority">
+                                        <span class="priority-icon">${priorityIcon}</span>
+                                        <span class="priority-text">${task.priority || 'No Priority'} Priority</span>
+                                    </div>
+                                </div>
+                                <span class="remove-task" onclick="removeTask(${index})">&times;</span>
+                            `;
+                            taskItem.querySelector('.tag-priority').prepend(tagContainer);
+                            taskListContainer.appendChild(taskItem);
+                        });
+                    }
+
+                    // Render the tasks from the selected sprint
+                    renderTasks();
+
+                    // Save changes to the sprint
+                    document.getElementById('create_sprint-btn').addEventListener('click', function() {
+                        const sprintName = document.getElementById('sprint-name').value.trim();
+                        const startDate = document.getElementById('start-date').value;
+                        const endDate = document.getElementById('end-date').value;
+
+                        if (!sprintName || !startDate || !endDate) {
+                            openModal('Please fill in all fields.');
+                            return;
+                        }
+
+                        const start = new Date(startDate);
+                        const end = new Date(endDate);
+                        const current = new Date();
+
+                        if (start >= end) {
+                            openModal('Start date must be earlier than the end date.');
+                            return;
+                        }
+
+                        let status = 'Not-Started';
+                        if (current > end) {
+                            status = 'Completed';
+                        } else if (current >= start && current <= end) {
+                            status = 'Active';
+                        }
+
+                        // Calculate totalSp and completedSp from the selected tasks
+                        let totalSp = 0;
+                        let completedSp = 0;
+                        selectedTasks.forEach(task => {
+                            totalSp += Number(task.storyPoints) || 0;
+                            if (task.status === 'Completed') {
+                                completedSp += Number(task.storyPoints) || 0;
+                            }
+                        });
+
+                        // Update sprint data
+                        sprintData.name = sprintName;
+                        sprintData.startDate = startDate;
+                        sprintData.endDate = endDate;
+                        sprintData.tasks = selectedTasks;
+                        sprintData.totalSp = totalSp;
+                        sprintData.completedSp = completedSp;
+                        sprintData.status = status;
+
+                        // Save the updated sprints array back to localStorage
+                        localStorage.setItem('sprints', JSON.stringify(sprints));
+
+                        // Clear selectedTasks after saving
+                        localStorage.removeItem('selectedTasks');
+
+                        // Show success modal and redirect after clicking 'OK'
+                        openModal('Sprint updated successfully!', function() {
+                            window.location.href = 'sprint_board.html';
+                        });
+                    });
+
+                    // Function to remove a task by index
+                    window.removeTask = function(index) {
+                        const removedTask = selectedTasks[index];
+                        selectedTasks.splice(index, 1); // Remove task
+                        sprintData.tasks = selectedTasks;
+                        localStorage.setItem('sprints', JSON.stringify(sprints));
+
+                        // Update localStorage for the product backlog
+                        let productBacklog = JSON.parse(localStorage.getItem('product-backlog')) || [];
+                        productBacklog.push(removedTask);
+                        localStorage.setItem('product-backlog', JSON.stringify(productBacklog));
+
+                        // Re-render the task list
+                        renderTasks();
+                    };
+
+                    // Cancel button behavior
+                    document.getElementById('cancel-btn').addEventListener('click', function() {
+                        // Revert sprint tasks to original state (before new tasks were added)
+                        selectedTasks = [...originalTasks];
+                        
+                        // Re-render tasks and remove any newly selected tasks
+                        localStorage.removeItem('selectedTasks');
+                        renderTasks();
+                    });
+
+                } else {
+                    alert('Sprint not found!');
+                    window.history.back();
+                }
+            });
+
+
+
+            function addTask() {
+                if (sprintData.status === 'Not-Started') {
+                    window.location.href = 'task-select.html';
+                } else {
+                    alert('Task only can be added before the Sprint started!')
+                    return
+                }
+            
+            }
+
+
+            // Function to open the modal with a custom message
+            function openModal(message, callback) {
+                const modal = document.getElementById('popupModal');
+                const modalMessage = document.getElementById('modalMessage');
+                const closeModal = document.getElementById('closeModal');
+                const modalOkButton = document.getElementById('modalOkButton');
+
+                // Set the modal message
+                modalMessage.innerHTML = message;
+
+                // Display the modal
+                modal.style.display = 'block';
+
+                // Close the modal when the 'x' or 'OK' button is clicked
+                closeModal.onclick = close;
+                modalOkButton.onclick = close;
+
+                function close() {
+                    modal.style.display = 'none';
+                    if (callback) {
+                        callback(); // Call the callback function after closing, if provided
+                    }
+                }
+
+                // Close the modal if the user clicks outside of the modal content
+                window.onclick = function(event) {
+                    if (event.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                };
+            }
+
+            function redirectToProfile() {
+                const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+                if (currentMember && currentMember.role) {
+                    if (currentMember.role === 'member') {
+                        window.location.href = 'member-profile.html'; // Redirect to member profile
+                    } else if (currentMember.role === 'admin') {
+                        window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+                    } else {
+                        console.error('Invalid role found for the current member.');
+                    }
+                } else {
+                    console.error('No current member data found.');
+                }
+            }
+        </script>        
+    </body>
+</html>

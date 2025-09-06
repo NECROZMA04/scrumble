@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrumble</title>
+    <link rel="icon" href="../images/tab-logo.png" type="png">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+        @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+      
+        body {
+            font-family: 'Futura', sans-serif; 
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            display: flex;
+            height: 100vh;
+            color: #6ec6e6;
+        }
+
+        .left-side {
+            width: 60%;
+            min-width: 768px; 
+            background-image: url('../images/Cover page image.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .right-side {
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 9rem;
+            box-sizing: border-box;
+            line-height: 1;
+        }
+
+        header {
+            font-family: "Bukhari Script", cursive; 
+            font-size: 45px;
+            color: #6ec6e6;
+            text-align: left;
+            box-sizing: border-box;
+            height: 170px; /* gap */
+            line-height: 1;
+        }
+
+        nav {
+            text-align: left;
+            margin-top: 0;
+            line-height: 1;
+        }
+
+        nav a {
+            font-family: 'Futura', sans-serif;
+            color: black;
+            font-size: 12px;
+            text-decoration: none;
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-top: 0;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #6ec6e6;
+        }
+
+        .login-form {
+            width: 100%;
+            max-width: 300px;
+            padding-top: 30px;
+            display: flex;
+        }
+
+        .login-form label {
+            font-family: 'Futura', sans-serif;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: 135%;
+            padding: 10px 20px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            border-radius: 20px;
+            border: none;
+            background-color: #e6e6e6;
+            box-sizing: border-box;
+            font-family: 'Futura', sans-serif;
+            font-size: 11px;
+        }
+
+        .login-form input[type="submit"] {
+            padding: 7px 30px;
+            border-radius: 20px;
+            border: none;
+            background-color: #6ec6e6;
+            color: white;
+            cursor: pointer;
+            font-family: 'Futura', sans-serif;
+            transition: background-color 0.3s;
+            font-size: 14px;
+            margin-top: 7px;
+            
+        }
+
+        .login-form input[type="submit"]:hover {
+            background-color: #527eab;
+        }
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            color: #527eab;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            font-size: 15px;
+            border-radius: 10px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 400px;
+            text-align: center;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="left-side">
+        <!-- picture -->
+    </div>
+
+    <div class="right-side">
+        <header>
+            <h1>Scrumble</h1>
+        </header>
+      
+        <nav>
+            <a href="#">Your Perfect Project Management Tool</a>
+        </nav>
+
+        <div class="login-form">
+            <form>
+                <label for="email">Username:</label>
+                <input type="text" id="email" placeholder="Enter your Username here" required autocomplete="off">
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Enter your password here" required autocomplete="off">
+
+                <input type="submit" value="Login">
+            </form>
+        </div>
+    </div>
+
+    <div id="custom-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modal-message"></p>
+        </div>
+    </div>
+
+</body>
+<script>
+    document.querySelector('form').addEventListener('submit', function (e) {
+        e.preventDefault();  // Prevent form from submitting
+
+        const defaultAdmin = {
+            username: 'admin1234',
+            password: 'admin1234'
+        };
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // Check if the input matches the default admin credentials
+        if (email === defaultAdmin.username && password === defaultAdmin.password) {
+            // Set role to 'admin'
+            let currentMember = {
+                role: 'admin',
+                memberId: '0'
+            };
+            localStorage.setItem('currentMember', JSON.stringify(currentMember));
+            window.location.href = "Admin_Profile.html";
+        } else {
+            // LOCALSTORAGE
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(user => user.username === email && user.password === password);
+
+            if (user) {
+                // Set role to 'member'
+                let currentMember = {
+                    role: 'member',
+                    memberId: user.id
+                };
+                localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+                window.location.href = "overview.html";
+            } else {
+                showModal('Username/password is incorrect');
+            }
+        }
+    });
+
+    function showModal(message) {
+        const modal = document.getElementById('custom-modal');
+        const modalMessage = document.getElementById('modal-message');
+        const closeModal = document.getElementsByClassName('close')[0];
+
+        modalMessage.textContent = message;  // Set the message in the modal
+        modal.style.display = 'block';  // Show the modal
+
+        // Close the modal when the user clicks the 'x' button
+        closeModal.onclick = function () {
+            modal.style.display = 'none';
+        };
+
+        // Close the modal when the user clicks outside of the modal
+        window.onclick = function (event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    }
+
+
+
+</script>
+</html>

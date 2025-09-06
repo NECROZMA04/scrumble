@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrumble</title>
+    <link rel="icon" href="../images/tab-logo.png" type="png">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+        @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+
+        body {
+            font-family: 'Futura', sans-serif;
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #6ec6e6;
+            padding-left: 5rem;
+            padding-right: 5rem;
+            padding-top: 1.5rem;
+        }
+
+        body::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        header {
+            font-family: "Bukhari Script", cursive;
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #6ec6e6;
+            padding-bottom: 1rem;
+            position: relative;
+        }
+
+        nav {
+            display: flex;
+            gap: 5.0rem;
+        }
+
+        nav a {
+            font-family: 'Futura', sans-serif;
+            color: #6f85a6;
+            text-decoration: none;
+            font-size: 23px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #6ec6e6;
+        }
+
+        .user-logo {
+            width: 50px;
+            height: 50px;
+            background-image: url('../images/user-icon.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: none;
+            transition: color 0.3s;
+        }
+
+        .user-logo:hover {
+            color: #6ec6e6;
+        }
+
+        hr {
+            height: 4px;
+            background-color: #6ec6e6;
+            border-color: #6ec6e6;
+            border: none;
+            border-radius: 20px;
+        }
+
+        h1 {
+            color: #40556e;
+            font-size: 35px;
+            padding: 5px;
+            margin-top: 40px;
+            border-radius: 20px;
+        }
+
+        .content{
+            padding: 0px 5px;
+        }
+
+        .sprint-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sprint-list li{
+            text-align: center;
+            align-items: center;
+            font-weight: bold;
+            color: #2e587d;
+            background-color: #e8f6fb;
+        }
+
+        .sprint-item {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sprint-item h2 {
+            margin: 0;
+            color: #5a5959;
+        }
+
+        .sprint-item p {
+            margin: 5px 0;
+            color: #777;
+        }
+
+        .add-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px; 
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .add-buttons button {
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .create-sprint-btn {
+            background-color: #6ec6e6;
+        }
+        .create-sprint-btn:hover {
+            background-color: #5db1cf;
+        }
+
+        nav a.current{
+            color: #2e587d;
+        }
+
+        .sprint-table {
+            width: 100%;
+            border-collapse: separate; /* Use separate for spacing between rows */
+            border-spacing: 0 15px; /* Adds vertical margin between rows */
+        }
+
+        .sprint-table th {
+            color: #b3c3d1;
+            font-weight: bolder;
+            font-size: 15px;
+            text-align: left;
+            border-radius: 20px;
+            padding: 13px;
+        }
+
+        .sprint-table tbody td {
+            background-color: #e8f6fb;
+            color: #508dbc;
+            padding: 13px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sprint-table tbody tr {
+            margin-bottom: 10px; 
+            border-radius: 20px;
+        }
+
+        .sprint-table tr:hover td {
+            background-color: #f3fcff;
+        }
+
+        .sprint-table tbody td:first-child {
+            border-top-left-radius: 20px;
+            border-bottom-left-radius: 20px;
+        }
+
+        .sprint-table tbody td:last-child {
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+        .sprint-table thead th:last-child{
+            color: #f3fcff;
+        }
+
+        /* Dropdown Button */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-btn {
+            background-color: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #508dbc;
+            margin-left: 100px;
+            margin-right: 5px;
+        }
+
+        /* Dropdown Content (Hidden by default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            min-width: 150px;
+            font-size: 15px;
+            z-index: 1;
+            border-radius: 10px;
+        }
+
+        .dropdown-content a {
+            color: #508dbc;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            color: #40556e;
+            background-color: #dfe4ec;
+        }
+
+        /* Show the dropdown menu when the button is clicked */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .logout-button{
+            background-color: #66ccff;
+            color: #fff;
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            margin-left: 150px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover{
+            background-color: #56a6c4;
+        }
+
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body onload="checkAuthentication()">
+    <header>
+        <div class="logo">Scrumble</div>
+        <nav>
+            <a href="overview.html" >Product Backlog</a>
+            <a href="sprint_board.html" class = "current"><strong>Sprint Board</strong></a>
+        </nav>
+        <div class="logout-button" onclick="logout()">Log out</div>
+        <div class="user-logo" onclick="redirectToProfile()"></div>
+    </header>
+    <hr>
+    <div class="content">
+        <h1>Sprint Board</h1>
+        <!-- Sprint table -->
+        <table class="sprint-table" id="sprint-table">
+            <thead>
+                <tr>
+                    <th>Sprint Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Total SP</th>
+                    <th>Completed SP</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="sprint-list">
+                <!-- Sprint rows will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="add-buttons">
+        <button class="create-sprint-btn" id="create_sprint-btn" onclick="window.location.href='create-sprint02.html'">Create Sprint</button>
+    </div>
+
+    <script>
+        function checkAuthentication() {
+            // Retrieve currentMember from localStorage
+            const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            // If currentMember does not exist or memberId is -1, redirect to index.html
+            if (!currentMember || currentMember.memberId === -1) {
+                window.location.href = 'index.html'; // Redirect to login page
+            }
+        }
+
+        function logout() {
+            // Get the currentMember from localStorage
+            let currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            if (currentMember) {
+                // Update the role and memberId
+                currentMember.role = 'None';
+                currentMember.memberId = -1;
+
+                // Save the updated currentMember back to localStorage
+                localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+                // Redirect to the index.html page (or login page)
+                window.location.href = 'index.html';
+            } else {
+                console.error('No currentMember found in localStorage.');
+            }
+        }
+        function redirectToProfile() {
+            const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+            if (currentMember && currentMember.role) {
+                if (currentMember.role === 'member') {
+                    window.location.href = 'member-profile.html'; // Redirect to member profile
+                } else if (currentMember.role === 'admin') {
+                    window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+                } else {
+                    console.error('Invalid role found for the current member.');
+                }
+            } else {
+                console.error('No current member data found.');
+            }
+        }
+
+        function displaySprints() {
+            const sprintList = document.getElementById('sprint-list');
+            sprintList.innerHTML = ''; // Clear any existing content
+
+            // Retrieve sprints and tasks from local storage
+            const sprints = JSON.parse(localStorage.getItem('sprints')) || [];
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+            // Check if there are any sprints to display
+            if (sprints.length === 0) {
+                sprintList.innerHTML = '<tr><td colspan="7">No sprints available.</td></tr>';
+                return;
+            }
+
+            const currentDate = new Date();
+
+            // Create a row for each sprint
+            sprints.forEach(sprint => {
+                const startDate = new Date(sprint.startDate);
+                const endDate = new Date(sprint.endDate);
+
+                // Calculate total story points and completed story points
+                let totalSp = 0;
+                let completedSp = 0;
+
+                sprint.tasks.forEach(sprintTask => {
+                    const task = tasks.find(t => t.id === sprintTask.id); // Find the task in local storage
+                    if (task) {
+                        totalSp += Number(task.storyPoints) || 0; // Add story points for all tasks
+                        if (task.status === 'Completed') {
+                            completedSp += Number(task.storyPoints) || 0; // Add to completedSp if the task is completed
+                        }
+                    }
+                });
+
+                sprint.totalSp = totalSp;
+                sprint.completedSp = completedSp;
+                
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${sprint.name}</td>
+                    <td>${sprint.startDate}</td>
+                    <td>${sprint.endDate}</td>
+                    <td>${totalSp}</td> <!-- Total story points -->
+                    <td>${completedSp}</td> <!-- Completed story points -->
+                    <td>${sprint.status}</td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="dropdown-btn" onclick="event.stopPropagation();">...</button>
+                            <div class="dropdown-content">
+                                <a href="#" onclick="editSprint('${sprint.id}'); event.stopPropagation();">Edit Sprint</a>
+                                <a href="#" onclick="viewDetails('${sprint.id}'); event.stopPropagation();">View Details</a>
+                                <a href="#" onclick="deleteSprint('${sprint.id}'); event.stopPropagation();">Delete Sprint</a>
+                            </div>
+                        </div>
+                    </td>
+                `;
+
+                // Add a click event listener for the row
+                row.addEventListener('click', function() {
+                    window.location.href = `sprint-backlog-card.html?sprintId=${sprint.id}`;
+                });
+
+                sprintList.appendChild(row);
+            });
+            localStorage.setItem('sprints', JSON.stringify(sprints));
+        }
+
+
+
+        // Example functions for actions
+        function editSprint(sprintId) {
+            window.location.href = `edit-sprint.html?sprintId=${sprintId}`;
+        }
+
+        function viewDetails(sprintId) {
+            window.location.href = `sprint-details.html?sprintId=${sprintId}`;
+        }
+
+        function deleteSprint(id) {
+            // Retrieve sprints from localStorage
+            let sprints = JSON.parse(localStorage.getItem('sprints')) || [];
+            
+            // Filter out the sprint to delete
+            sprints = sprints.filter(sprint => sprint.id !== id);
+            
+            // Save the updated list back to localStorage
+            localStorage.setItem('sprints', JSON.stringify(sprints));
+            
+            // Refresh the sprint list on the page
+            displaySprints();
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            checkAuthentication();
+            displaySprints();
+        });
+    </script>
+</body>
+
+</html>

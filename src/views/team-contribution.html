@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrumble</title>
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+        @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+
+        body {
+            font-family: 'Futura', sans-serif; 
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #6ec6e6;
+            padding-left: 5rem;
+            padding-right: 5rem;
+            padding-top: 1.5rem;
+        }
+
+        header {
+            font-family: "Bukhari Script", cursive; 
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #6ec6e6;
+            padding-bottom: 1rem;
+            position: relative;
+        }
+
+        nav {
+            display: flex;
+            gap: 5.0rem;
+        }
+
+        nav a {
+            font-family: 'Futura', sans-serif;
+            color: #6f85a6;
+            text-decoration: none;
+            font-size: 23px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #6ec6e6;
+        }
+
+        .user-logo {
+            width: 50px;
+            height: 50px;
+            background-image: url('user-icon.png'); 
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: none;
+            transition: color 0.3s;
+        }
+
+        .user-logo:hover {
+            color: #6ec6e6;
+        }
+
+        hr {
+            height: 4px;
+            background-color: #6ec6e6;
+            border-color: #6ec6e6;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .content {
+            padding: 2rem;
+            text-align: left; 
+        }
+
+        .content label{
+            margin-top: 10px;
+        }
+
+    
+
+        .button{
+            background-color: #6ec6e6;
+            color: #ffffff;
+            padding: 0.75rem 2rem;
+            margin-top: 20px;
+            font-size: 15px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #5ca7c5;
+        }
+        .logout-button{
+            background-color: #6ec6e6;
+            color: #fff;
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            margin-left: 150px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover{
+            background-color: #56a6c4;
+        }
+
+        .team-contribution h2{
+            font-size: 30px;
+            color: #202930;
+        }
+
+
+
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Scrumble</div>
+        <nav>
+            <a href="overview.html" class = "current">Product Backlog</a>
+            <a href="sprint_board.html">Sprint Board</a>
+            <a href="Admin_Profile.html">My Team</a>
+        </nav>
+        <div class="logout-button" onclick="window.location.href='index.html'">Log out</div>
+        <div class="user-logo" onclick="redirectToProfile()"></div>
+    </header>
+    <hr>
+    <div class="content">
+        <div class="team-contribution">
+            <h2>Personal Contribution Graph</h2>
+            <canvas id="teamContributionChart" width="400" height="200"></canvas>
+        </div>
+    
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </div>
+
+</body>
+<script>
+    function redirectToProfile() {
+        const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+        if (currentMember && currentMember.role) {
+            if (currentMember.role === 'member') {
+                window.location.href = 'member-profile.html'; // Redirect to member profile
+            } else if (currentMember.role === 'admin') {
+                window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+            } else {
+                console.error('Invalid role found for the current member.');
+            }
+        } else {
+            console.error('No current member data found.');
+        }
+    }
+
+    function processLogTimeHistory(users) {
+        const dateLogs = {};
+
+        users.forEach(user => {
+            if (user.logtimeshistory && user.logtimeshistory.length > 0) {
+                user.logtimeshistory.forEach(logtime => {
+                    const logDate = logtime.localDate; // Extract the log date
+                    const timeSpent = parseFloat(logtime.timeSpent) / 60; // Convert time spent to hours
+
+                    if (dateLogs[logDate]) {
+                        dateLogs[logDate] += timeSpent;
+                    } else {
+                        dateLogs[logDate] = timeSpent;
+                    }
+                });
+            }
+        });
+
+        return dateLogs;
+    }
+
+    // Retrieve users and sprints from localStorage
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const sprints = JSON.parse(localStorage.getItem('sprints')) || [];
+
+    // Find the active sprint
+    const activeSprint = sprints.find(sprint => sprint.status === 'Active');
+
+    if (activeSprint) {
+        const startDate = new Date(activeSprint.startDate);
+        const endDate = new Date(activeSprint.endDate);
+
+        // Generate an array of all dates between startDate and endDate
+        const getDatesInRange = (start, end) => {
+            const dates = [];
+            const currentDate = new Date(start);
+            while (currentDate <= end) {
+                dates.push(new Date(currentDate).toISOString().split('T')[0]); // YYYY-MM-DD format
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            return dates;
+        };
+        const sprintDates = getDatesInRange(startDate, endDate);
+
+        // Process log time history to get hours spent
+        const dateLogs = processLogTimeHistory(users);
+
+        // Map the hours spent to the sprint dates
+        const hoursSpent = sprintDates.map(date => dateLogs[date] || 0); // Default to 0 if no hours logged on that date
+
+        // Create the chart
+        const ctx = document.getElementById('teamContributionChart').getContext('2d');
+        const teamContributionChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: sprintDates, // X-axis labels (sprint dates)
+                datasets: [{
+                    label: 'Time Spent (Hours)',
+                    data: hoursSpent, // Y-axis data (hours spent)
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date' // X-axis title
+                        },
+                        grid: {
+                            drawOnChartArea: false, // Disable vertical grid lines
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Time Spent (Hours)' // Y-axis title
+                        },
+                        beginAtZero: true,
+                        grid: {
+                            drawOnChartArea: true, // Enable horizontal grid lines only
+                            drawBorder: true // Show axis borders
+                        }
+                    }
+                }
+            }
+        });
+    } else {
+        console.error('No active sprint found.');
+    }
+</script>
+
+
+</html>

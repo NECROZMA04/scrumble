@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Scrumble</title>
+        <link rel="icon" href="tab-logo.png" type="png">
+        <style>
+            @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+            @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+    
+            body {
+                font-family: 'Futura', sans-serif;
+                line-height: 1.6;
+                background-color: #ffffff;
+                color: #6ec6e6;
+                padding-left: 5rem;
+                padding-right: 5rem;
+                padding-top: 1.5rem;
+            }
+
+            body::-webkit-scrollbar {
+                width: 0; /* Remove scrollbar width */
+                height: 0; /* Remove scrollbar height for horizontal scroll */
+            }
+    
+            header {
+                font-family: "Bukhari Script", cursive;
+                font-size: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                color: #6ec6e6;
+                padding-bottom: 1rem;
+                position: relative;
+            }
+    
+            nav {
+                display: flex;
+                gap: 5.0rem;
+            }
+    
+            nav a {
+                font-family: 'Futura', sans-serif;
+                color: #6f85a6;
+                text-decoration: none;
+                font-size: 23px;
+                transition: color 0.3s;
+            }
+    
+            nav a:hover {
+                color: #6ec6e6;
+            }
+    
+            .user-logo {
+                width: 50px;
+                height: 50px;
+                background-image: url('user-icon.png');
+                background-size: cover;
+                background-position: center;
+                border-radius: 50%;
+                border: none;
+                transition: color 0.3s;
+            }
+    
+            .user-logo:hover {
+                color: #6ec6e6;
+            }
+    
+            hr {
+                height: 4px;
+                background-color: #6ec6e6;
+                border-color: #6ec6e6;
+                border: none;
+                border-radius: 20px;
+            }
+            .user-logo {
+                width: 50px;
+                height: 50px;
+                background-image: url('user-icon.png'); 
+                background-size: cover;
+                background-position: center;
+                border-radius: 50%;
+                border: none;
+                cursor: pointer;
+                transition: color 0.3s,transform 0.2s ease;
+            }
+    
+            .content {
+                display: flex;
+                flex-direction: column;
+                padding-top: 15px;
+                border-radius: 8px;
+                background-color: #ffffff;
+            }
+    
+            .task-header {
+                display: flex;
+                margin-bottom: 1rem;
+                flex-direction: row; /* Stack elements vertically */
+                position: relative; /* For positioning children */
+            }
+    
+            .task-header h2 {
+                font-size: 30px;
+                color: #5a5959;
+                font-family: 'Trebuchet MS', sans-serif;
+                margin: 0;
+                max-width: 60%;
+                overflow-wrap: break-word; /* Ensures long words break to fit within the container */
+                word-wrap: break-word; /* Alternative for older browsers */
+                word-break: normal; /* Forces word to break at any character to fit */
+                white-space: normal; /* Allows text to wrap onto the next line */
+                
+                display: block;
+            }
+            .sprint-name-input {
+                width: 100%;
+                padding: 15px;
+                margin-bottom: 20px;
+                color: #2c5a80;
+                background-color: #e8f6fb;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+            }
+
+            .form-section {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+            }
+
+            .date-section {
+                width: 40%;
+            }
+
+            .date-section label {
+                display: block;
+                margin-bottom: 5px;
+                color: #2e3a59;
+            }
+
+            .date-section input {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 15px;
+                border: none;
+                background-color: #e8f6fb;
+                color: #8baac4;
+                border-radius: 8px;
+                font-size: 14px;
+            }
+
+            .task-section {
+                width: 55%;
+            }
+
+            .task-section label {
+                display: block;
+                margin-bottom: 10px;
+                color: #2e3a59;
+                font-size: 18px;
+            }
+
+            .task-item {
+                position: relative;
+                border: 4px solid #c7e6f5;
+                border-radius: 20px;
+                background-color: #c7e6f5;
+                text-align: left;
+                color: #40556e;
+                cursor: pointer;
+                transition: background-color 0.3s ease, border 0.3s ease, transform 0.3s ease;
+                max-height: fit-content;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .task-item ul {
+                list-style-type: none;
+            }
+
+            .task-item ul li {
+                font-size: 14px;
+                color: #2e3a59;
+            }
+
+            .priority {
+                padding: 3px 10px;
+                border-radius: 15px;
+                font-size: 12px;
+                font-weight: bold;
+                margin-left: 10px;
+            }
+
+            .low {
+                background-color: #d5f2e3;
+                color: #38a169;
+            }
+
+            .high {
+                background-color: #ffd9d9;
+                color: #e53e3e;
+            }
+
+            .remove-task {
+                position: absolute;
+                top: 5px;
+                right: 30px;
+                cursor: pointer;
+                color: #8f9297;
+                font-size: 16px;
+            }
+
+            .add-task {
+                display: block;
+                width: 30px;
+                height: 30px;
+                font-size: 18px;
+                color: white;
+                background-color: #6ec6e6;
+                border: none;
+                border-radius: 50%;
+                margin: 10px 0;
+                cursor: pointer;
+            }
+
+            .create-sprint-btn:hover,
+            .cancel-sprint-btn:hover {
+                background-color: #5db1cf;
+            }
+
+            .cancel-sprint-btn {
+                background-color: #ff6b6b;
+            }
+
+            .container::after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+            .sprint-name-input, .date-section input {
+                width: 100%;
+                padding: 15px;
+                margin-bottom: 20px;
+                border-radius: 8px;
+                font-size: 16px;
+                background-color: #e8f6fb; 
+            }
+
+            .sprint-name-input::placeholder, .date-section input::placeholder {
+                color: #8baac4; 
+            }
+            .sprint-name-input:focus, .date-section input:focus {
+                outline: none; 
+                border: none; 
+                background-color: #e8f6fb; 
+            }
+
+            .content label{
+                font-weight: bold;
+                color: #5a5959;
+                margin-bottom: 10px;
+            }
+
+            .content h1{
+                font-size: 23px;
+                color: #5a5959;
+                margin-bottom: 10px;
+            }
+
+            .add-buttons {
+                display: flex;
+                justify-content: flex-end;
+                gap: 20px; 
+                padding: 20px;
+                margin-top: 20px;
+            }
+
+            .add-buttons button {
+                border-radius: 10px;
+                padding: 10px 20px;
+                font-size: 16px;
+                color: white;
+                cursor: pointer;
+                border: none;
+                transition: background-color 0.3s ease;
+            }
+            .create-sprint-btn {
+                background-color: #6ec6e6;
+            }
+            .create-sprint-btn:hover {
+                background-color: #5db1cf;
+            }
+
+            .cancel-sprint-btn {
+                background-color: #bebebe;
+            }
+            .cancel-sprint-btn:hover {
+                background-color: #ff7f7f;
+            }
+
+            .task {
+                position: relative;
+                border: 4px solid #a0c6e6;
+                border-radius: 20px;
+                background-color: #a0c6e6;
+                text-align: left;
+                color: #40556e;
+                transition: background-color 0.3s ease, border 0.3s ease, transform 0.3s ease;
+                max-height: fit-content;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .card-title {
+                font-size: 18px;
+                font-weight: bold;
+                color: #2e587d; /* Dark blue text */
+                margin: 5px;
+                margin-left: 10px;
+                padding-right: 50px;
+                min-width: 500px;
+                max-width: 500px;
+                max-height: fit-content;
+                display: flex;
+                word-break: break-word; /* Ensures words break properly to the next line */
+                white-space: normal;
+            }
+
+            .card-content {
+                background-color: #ffffff; /* White background for the content */
+                padding: 5px;
+                border-radius: 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                flex-grow: 1;
+                min-height: 50px;
+            }
+
+            .tag-priority {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .tag {
+                color: #fff;
+                padding: 5px 10px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: bold;
+                margin-top: 10px;
+                margin-left: 10px;
+                min-width: 100px;
+                text-align: center;
+            }
+
+            .tags-container {
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: row;
+                gap: 5px;
+                font-size: 12px;
+                margin-left: 20px;
+                margin-bottom: 5px;
+                justify-content: flex-start;
+                max-width: 300px;
+            }
+
+            .tags-container span{
+                padding: 5px;
+                margin-top: 11px;
+                border-radius: 20px;
+                width: 80px;
+                text-align: center;
+            }
+
+            /* Tag styles */
+            .tag-front-end {
+                background-color: #ffd561; /* Light orange */
+                color: #fff;
+            }
+
+            .tag-back-end {
+                background-color: #66ccff; /* Light blue */
+                color: #fff;
+            }
+
+            .tag-ui {
+                background-color: #ff99cc; /* Light pink */
+                color: #fff;
+            }
+
+            .tag-ux {
+                background-color: #cc99ff; /* Light purple */
+                color: #fff;
+            }
+
+            .tag-database {
+                background-color: #66e91b; /* Lavender */
+                color: #ffffff;
+            }
+
+            .tag-api {
+                background-color: #ff5757; /* Light green */
+                color: #fff;
+            }
+
+            .tag-framework {
+                background-color: #ff914d; /* Peach */
+                color: #fff;
+            }
+
+            .tag-testing {
+                background-color: #5271ff; /* Light red */
+                color: #fff;
+            }
+
+            .tag-default{
+                background-color: #a9acad; /* Light red */
+                color: #fff;
+            }
+
+            .story-points {
+                background-color: #6ec6e6; /* Light blue background */
+                color: #fff;
+                padding: 5px 10px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: bold;
+                margin-right: 10px;
+                margin-top: 10px;
+            }
+
+            #task-list{
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: row;
+                gap: 20px;
+                max-width: 100%;
+                justify-content: flex-start;
+            }
+
+            .task-item{
+                margin-left: 10px;
+                font-size: 20px;
+                color: #40556e;
+                flex-wrap: wrap; /* Allows the text to wrap within the element */
+                white-space: normal; /* Allows text to break and wrap normally */
+                overflow-wrap: break-word; /* Ensures long words break to prevent overflow */
+                word-wrap: break-word; 
+            }
+            .logout-button{
+                background-color: #66ccff;
+                color: #fff;
+                font-size: 20px;
+                padding: 5px 10px;
+                border-radius: 20px;
+                display: flex;
+                margin-left: 150px;
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .logout-button:hover{
+                background-color: #56a6c4;
+            }
+
+
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+    <body onload="checkAuthentication()">
+        <header>
+            <div class="logo">Scrumble</div>
+            <nav>
+                <a href="overview.html" >Product Backlog</a>
+                <a href="sprint_board.html" class = "current">Sprint Board</a>
+            </nav>
+            <div class="logout-button" onclick="logout()">Log out</div>
+            <div class="user-logo" onclick="redirectToProfile()"></div>
+        </header>
+        <hr>
+    
+
+        <div class="content">
+        <!-- Task header -->
+            <div class="task-header">
+                <h2>Create New Sprint</h2>
+            </div>
+            <h1>Sprint Name</h1>
+            <input type="text" placeholder="Enter your Sprint Name here..." class="sprint-name-input" id="sprint-name">
+
+            <div class="form-section">
+                <div class="date-section">
+                    <label for="start-date">Start Date</label>
+                    <input type="date" id="start-date" placeholder="Enter your Start Date here...(DD/MM/YYYY)">
+                    
+                    <label for="end-date">End Date</label>
+                    <input type="date" id="end-date" placeholder="Enter your End Date here...(DD/MM/YYYY)">
+                </div>
+
+                <div class="task-section">
+                    <label>Task Selection</label>
+                    <!-- Container for function to display task here -->
+                    <div id="task-list"></div>
+                    <button class="add-task" onclick="addTask()">+</button>
+                </div>
+            </div>
+            <div class="add-buttons">
+                <button class="create-sprint-btn" id="create_sprint-btn">Create Sprint</button>
+                <button class="cancel-sprint-btn" id="cancel-sprint-btn" onclick="window.history.back()">Cancel</button>
+            </div>
+            
+        </div>
+        <script>
+            function checkAuthentication() {
+                // Retrieve currentMember from localStorage
+                const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+                // If currentMember does not exist or memberId is -1, redirect to index.html
+                if (!currentMember || currentMember.memberId === -1 || currentMember.role === 'None') {
+                    window.location.href = 'index.html'; // Redirect to login page
+                }
+            }
+
+            function logout() {
+                // Get the currentMember from localStorage
+                let currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+                if (currentMember) {
+                    // Update the role and memberId
+                    currentMember.role = 'None';
+                    currentMember.memberId = -1;
+
+                    // Save the updated currentMember back to localStorage
+                    localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+                    // Redirect to the index.html page (or login page)
+                    window.location.href = 'index.html';
+                } else {
+                    console.error('No currentMember found in localStorage.');
+                }
+            }
+
+            document.querySelector('.create-sprint-btn').addEventListener('click', function() {
+                const sprintName = document.getElementById('sprint-name').value.trim();
+                const startDate = document.getElementById('start-date').value;
+                const endDate = document.getElementById('end-date').value;
+                const sprintId = generateUniqueId();
+
+                // Retrieve selected tasks from localStorage
+                const tasks = JSON.parse(localStorage.getItem('selectedTasks')) || [];
+
+                if (!sprintName || !startDate || !endDate) {
+                    alert('Please fill in all fields.');
+                    return;
+                }
+
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+
+                if (start >= end) {
+                    alert('Start date must be earlier than the end date.');
+                    return;
+                }
+
+                let currentDate = new Date();
+                let status = 'Not-Started';
+                if (currentDate > end) {
+                    status = 'Completed';
+                } else if (currentDate >= start && currentDate <= end) {
+                    status = 'Active';
+                }
+
+                let totalSp = 0;
+                let completedSp = 0;
+
+                // Calculate totalSp and completedSp from the selected tasks
+                tasks.forEach(task => {
+                    totalSp += Number(task.storyPoints) || 0;  // Ensure storyPoints is a number
+                    if (task.status === 'Completed') {
+                        completedSp += Number(task.storyPoints) || 0;  // Ensure storyPoints is a number
+                    }
+                });
+
+                const sprint = {
+                    id: sprintId,
+                    name: sprintName,
+                    startDate: startDate,
+                    endDate: endDate,
+                    tasks: tasks,
+                    totalSp: totalSp,
+                    completedSp: completedSp,
+                    status: status
+                };
+
+                const existingSprints = JSON.parse(localStorage.getItem('sprints')) || [];
+
+                existingSprints.push(sprint);
+
+                localStorage.setItem('sprints', JSON.stringify(existingSprints));
+                localStorage.removeItem('selectedTasks');
+
+                alert('Sprint created successfully!');
+                window.location.href = 'sprint_board.html';
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const taskListContainer = document.getElementById('task-list');
+
+                // Retrieve tasks from localStorage
+                const selectedTasks = JSON.parse(localStorage.getItem('selectedTasks')) || [];
+                // Function to render tasks in the task list
+                function renderTasks() {
+                    taskListContainer.innerHTML = ''; // Clear the container first
+
+                    selectedTasks.forEach((task, index) => {
+                        const taskItem = document.createElement('div');
+                        taskItem.classList.add('task-item');
+
+                        let priorityIcon = '';
+                        switch (task.priority?.toLowerCase()) {
+                            case 'urgent':
+                                priorityIcon = '🔴';
+                                break;
+                            case 'important':
+                                priorityIcon = '🟠';
+                                break;
+                            case 'medium':
+                                priorityIcon = '🟡';
+                                break;
+                            case 'low':
+                                priorityIcon = '🟢';
+                                break;
+                            default:
+                                priorityIcon = '⚪';
+                        }
+
+                        const tagContainer = document.createElement('div');
+                        tagContainer.className = 'tags-container';
+
+                        const taskTags = Array.isArray(task.tags) ? task.tags : (task.tags ? [task.tags] : []);
+
+                        if (taskTags.length === 0) {
+                            const tagElement = document.createElement('span');
+                            tagElement.className = 'tag-default';
+                            tagElement.textContent = 'No Tags';
+                            tagContainer.appendChild(tagElement);
+                        } else {
+                            taskTags.forEach(tag => {
+                                let tagClass = '';
+                                switch (tag?.toLowerCase()) {
+                                    case 'front-end': tagClass = 'tag-front-end'; break;
+                                    case 'back-end': tagClass = 'tag-back-end'; break;
+                                    case 'ui': tagClass = 'tag-ui'; break;
+                                    case 'ux': tagClass = 'tag-ux'; break;
+                                    case 'database': tagClass = 'tag-database'; break;
+                                    case 'api': tagClass = 'tag-api'; break;
+                                    case 'framework': tagClass = 'tag-framework'; break;
+                                    case 'testing': tagClass = 'tag-testing'; break;
+                                    default: tagClass = 'tag-default';
+                                }
+
+                                const tagElement = document.createElement('span');
+                                tagElement.className = `${tagClass}`;
+                                tagElement.textContent = tag || 'No Tag';
+                                tagContainer.appendChild(tagElement);
+                            });
+                        }
+
+                        taskItem.innerHTML = `
+                            <h2 class="card-title">${task.title}</h2>
+                            <div class="card-content">
+                                <div class="tag-priority">
+                                    <span class="story-points">${task.storyPoints || 0} SP</span>
+                                </div>
+                                <div class="priority">
+                                    <span class="priority-icon">${priorityIcon}</span>
+                                    <span class="priority-text">${task.priority || 'No Priority'} Priority</span>
+                                </div>
+                            </div>
+                            <span class="remove-task" onclick="removeTask(${index})">&times;</span>
+                        `;
+                        taskItem.querySelector('.tag-priority').prepend(tagContainer);
+                        taskListContainer.appendChild(taskItem);
+                    });
+                }
+
+                // Call the function to render tasks when the page loads
+                renderTasks();
+
+                // Function to remove task by index
+                window.removeTask = function(index) {
+                    // Retrieve the selected task being removed
+                    const removedTask = selectedTasks[index];
+
+                    // Remove the task from the selectedTasks array
+                    selectedTasks.splice(index, 1);  
+
+                    // Retrieve the tasks array from localStorage
+                    let tempTasks = JSON.parse(localStorage.getItem('product-backlog')) || [];
+
+                    // Add the removed task back to tempTasks
+                    tempTasks.push(removedTask);
+
+                    // Update localStorage for both selectedTasks and tempTasks
+                    localStorage.setItem('selectedTasks', JSON.stringify(selectedTasks));  // Update localStorage for selectedTasks
+                    localStorage.setItem('product-backlog', JSON.stringify(tempTasks));  // Update localStorage for tasks
+
+                    // Re-render the task list
+                    renderTasks();
+                };
+
+            });
+
+            function addTask(){
+                window.location.href = 'task-select.html';
+            }
+
+            function generateUniqueId() {
+                return 'sprint-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+            }
+
+            function redirectToProfile() {
+                const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+                if (currentMember && currentMember.role) {
+                    if (currentMember.role === 'member') {
+                        window.location.href = 'member-profile.html'; // Redirect to member profile
+                    } else if (currentMember.role === 'admin') {
+                        window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+                    } else {
+                        console.error('Invalid role found for the current member.');
+                    }
+                } else {
+                    console.error('No current member data found.');
+                }
+            }
+        </script>
+    </body>
+</html>

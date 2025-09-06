@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrumble</title>
+    <link rel="icon" href="../images/tab-logo.png" type="png">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+        @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+
+        body {
+            font-family: 'Futura', sans-serif; 
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #6ec6e6;
+            padding-left: 5rem;
+            padding-right: 5rem;
+            padding-top: 1.5rem;
+            overflow: auto;
+        }
+
+        body::-webkit-scrollbar {
+            width: 0; /* Remove scrollbar width */
+            height: 0; /* Remove scrollbar height for horizontal scroll */
+        }
+
+        header {
+            font-family: "Bukhari Script", cursive; 
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #6ec6e6;
+            padding-bottom: 1rem;
+            position: relative;
+        }
+
+        nav {
+            display: flex;
+            gap: 5.0rem;
+        }
+
+        nav a {
+            font-family: 'Futura', sans-serif;
+            color: #6f85a6;
+            text-decoration: none;
+            font-size: 23px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #6ec6e6;
+        }
+
+        .user-logo {
+            width: 50px;
+            height: 50px;
+            background-image: url('../images/user-icon.png'); 
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: none;
+
+            transition: color 0.3s;
+        }
+
+        .user-logo:hover {
+            color: #6ec6e6;
+        }
+
+        hr {
+            height: 4px;
+            background-color: #6ec6e6;
+            border-color: #6ec6e6;
+            border: none;
+            border-radius: 20px;
+            margin-left: 20px;
+        }
+
+        .content {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .task-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin: auto;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .left-half {
+            width: 65%;
+            text-align: left;
+            padding-top: 5px;
+        }
+
+        .right-half {
+            width: 25%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .attribute-row {
+            display: flex;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .attribute-row label {
+            flex: 1;
+            font-size: 18px;
+            color: #40556e;
+            text-align: left
+        }
+
+        .attribute-row select {
+            flex: 1;
+            font-size: 16px;
+            font-weight: bold;
+            color: #40556e;
+            padding: 8px;
+            border: none;
+            background-color: #e8f6fb;
+            border-radius: 10px;
+            padding-inline: 10px;
+            box-sizing: border-box;
+        }
+
+        .input-group {
+            margin-bottom: 5px;
+            margin-right: 10px;
+            font-family: 'Futura', sans-serif;
+            font-size: 22px;
+            color: #40556e;
+            display: flex;
+            align-items: left;
+        }
+
+        .input-group-task-name {
+            font-family: 'Futura', sans-serif;
+            font-size: 34px;
+            color: #40556e;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .task-name-editable {
+            width: 100%;
+            padding: 5px;
+            border: none; 
+            outline: none; 
+            border-bottom: 2px solid #e6e6e6; 
+            background-color: transparent; 
+            font-size: 32px;
+            color: #40556e;
+        }
+
+        .task-name-editable:empty:before {
+            content: '<<Untitled New Task #1>>'; 
+            font-family: 'Futura', sans-serif;
+            font-size: 32px;
+            color: #40556e; 
+            margin-right: 10px;
+        }
+
+        .input-group label {
+            padding-top: 5px;
+            margin-right: 25px; 
+            margin-bottom: 15px;
+            width: 100px; 
+            text-align: left; 
+        }
+
+        .input-group input, .input-group select {
+            font-size: 16px;
+            font-weight: bold;
+            color: #40556e;
+            padding: 8px;
+            border: none;
+            background-color: #e8f6fb;
+            border-radius: 10px;
+            padding-inline: 10px;
+            width: 100%; 
+            max-width: 250px; 
+            box-sizing: border-box; 
+            text-align: left;
+        }
+
+        .description-container {
+            margin-top: 10px;
+            margin-bottom: 15px;
+            font-size: 28px;
+            border: none; 
+            color: #40556e;
+        }
+
+        .attribute-container {
+            margin-top: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e6e6e6; 
+            font-size: 34px;
+            color: #40556e;
+            text-align: left
+        }
+
+        .description-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none; 
+            outline: none;
+            background-color: #e8f6fb; 
+            border-radius: 10px; 
+            resize: vertical; 
+            font-size: 18px;
+            color: #40556e; 
+            resize: none;
+            overflow: visible;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            gap: 15px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px; 
+            font-size: 16px;
+            cursor: pointer;
+            font-family: 'Futura', sans-serif;
+            transition: background-color 0.3s;
+        }
+
+        .create-button {
+            background-color: #6ec6e6;
+            color: #ffffff;
+            border: none;
+            border-radius: 20px; 
+            font-size: 16px;
+            padding: 10px 20px;
+        }
+
+        .create-button:hover {
+            background-color: #5bb5d5;
+        }
+
+        .cancel-button {
+            background-color: #f9f9f9;
+            color: #40556e;
+            border: none;
+            border-radius: 20px; 
+            font-size: 16px;
+            padding: 10px 20px;
+        }
+
+        .cancel-button:hover {
+            background-color: #d4d4d4;
+        }
+
+        .tags-row{
+            display: flex;
+            align-items: flex-start; /* Aligns items to the top */
+        }
+
+        .tags-row label {
+            flex: 1;
+            font-size: 18px;
+            color: #40556e;
+            text-align: left;
+            min-width: 100px;
+            margin-right: 20px;
+        }
+
+        .tags-label {
+            flex: 1;
+            font-size: 18px;
+            color: #40556e;
+            text-align: left;
+            max-width: 150px;
+        }
+
+        .tags-checkbox-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            background-color: #e8f6fb;
+            border-radius: 10px;
+            padding-inline: 10px;
+            padding: 15px;
+        }
+
+        .tags-checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+            margin-bottom: 8px; /* Adds space between checkboxes */
+        }
+        .logout-button{
+            background-color: #66ccff;
+            color: #fff;
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            margin-left: 150px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover{
+            background-color: #56a6c4;
+        }
+
+
+    </style>
+</head>
+<body onload="checkAuthentication()">
+    <header>
+        <div class="logo">Scrumble</div>
+        <nav>
+            <a href="overview.html">Product Backlog</a>
+            <a href="sprint_board.html">Sprint Board</a>
+        </nav>
+        <div class="logout-button" onclick="logout()">Log out</div>
+        <div class="user-logo" onclick="redirectToProfile()"></div>
+    </header>
+    <hr>
+    
+    <div class="content">
+        <!-- Task Creation Form -->
+         <form>
+            <div class="task-container">
+                <!-- Left Half: Task Name and Description -->
+                <div class="left-half">
+                    <!-- Task Name Editable Input -->
+                    <div class="input-group-task-name">
+                        <div id="taskName" class="task-name-editable" contenteditable="true" required></div>
+                    </div>
+
+                    <!-- Task Description -->
+                    <div class="description-container">
+                        <label for="taskDescription">Description:</label>
+                        <textarea id="taskDescription" name="taskDescription" rows="5" placeholder="Enter task description here..." required></textarea>
+                    </div>
+                </div>
+
+                <!-- Right Half: Task Attributes -->
+                <div class="right-half">
+                    <div class="attribute-container">
+                        <label>Attributes</label>
+                    </div>
+
+                    <div class="attribute-row">
+                        <label for="attribute1">Assignee</label>
+                        <select id="attribute1" name="attribute1">
+                            <!-- Options will be dynamically added here -->
+                        </select>
+                    </div>
+
+                    <div class="attribute-row">
+                        <label for="attribute2">Priority</label>
+                        <select id="attribute2" name="attribute2">
+                            <option value="Low">🟢 Low</option>
+                            <option value="Medium">🟡 Medium</option>
+                            <option value="Important">🟠 Important</option>
+                            <option value="Urgent">🔴 Urgent</option>
+                        </select>
+                    </div>
+
+                    <div class="attribute-row">
+                        <label for="attribute3">Stages</label>
+                        <select id="attribute3" name="attribute3">
+                            <option value="Planning">Planning</option>
+                            <option value="Developing">Developing</option>
+                            <option value="Testing">Testing</option>
+                            <option value="Integrating">Integrating</option>
+                        </select>
+                    </div>
+
+                    <div class="attribute-row">
+                        <label for="attribute4">Status</label>
+                        <select id="attribute4" name="attribute4">
+                            <option value="Not-Started">Not Started</option>
+                            <option value="In-progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+
+                    <div class="attribute-row">
+                        <label for="attribute5">Story Points</label>
+                        <select id="attribute5" name="attribute5">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+
+                    <div class="tags-row">
+                        <div class="tags-label"><label for="attribute6">Tags</label></div>
+    
+                        <div class="tags-checkbox-group" id="attribute6">
+                            <input type="checkbox" id="frontend" name="attribute6" value="Front-End">
+                            <label for="frontend">Front-End</label><br>
+                    
+                            <input type="checkbox" id="backend" name="attribute6" value="Back-End">
+                            <label for="backend">Back-End</label><br>
+                    
+                            <input type="checkbox" id="ui" name="attribute6" value="UI">
+                            <label for="ui">UI</label><br>
+                    
+                            <input type="checkbox" id="ux" name="attribute6" value="UX">
+                            <label for="ux">UX</label><br>
+                    
+                            <input type="checkbox" id="database" name="attribute6" value="Database">
+                            <label for="database">Database</label><br>
+                    
+                            <input type="checkbox" id="api" name="attribute6" value="API">
+                            <label for="api">API</label><br>
+                    
+                            <input type="checkbox" id="framework" name="attribute6" value="Framework">
+                            <label for="framework">Framework</label><br>
+                    
+                            <input type="checkbox" id="testing" name="attribute6" value="Testing">
+                            <label for="testing">Testing</label>
+                        </div>
+                    </div>
+
+                    <div class="attribute-row">
+                        <label for="attribute7">Type</label>
+                        <select id="attribute7" name="attribute7">
+                            <option value="Story">Story</option>
+                            <option value="Bug">Bug</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Buttons -->
+        <div class="button-container">
+            <button class="create-button">Create Task</button>
+            <button class="cancel-button">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        function checkAuthentication() {
+            // Retrieve currentMember from localStorage
+            const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            // If currentMember does not exist or memberId is -1, redirect to index.html
+            if (!currentMember || currentMember.memberId === -1 || currentMember.role === 'None') {
+                window.location.href = 'index.html'; // Redirect to login page
+            }
+        }
+
+        function logout() {
+            // Get the currentMember from localStorage
+            let currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+            if (currentMember) {
+                // Update the role and memberId
+                currentMember.role = 'None';
+                currentMember.memberId = -1;
+
+                // Save the updated currentMember back to localStorage
+                localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+                // Redirect to the index.html page (or login page)
+                window.location.href = 'index.html';
+            } else {
+                console.error('No currentMember found in localStorage.');
+            }
+        }
+
+        function populateAssigneeDropdown() {
+            checkAuthentication();
+            const users = JSON.parse(localStorage.getItem('users')) || [];  // Retrieve users from localStorage
+            const assigneeSelect = document.getElementById('attribute1');  // Get the Assignee dropdown
+
+            // Clear existing options (if any)
+            assigneeSelect.innerHTML = '';
+
+            // Loop through users and add them as options
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id;  // Use the user's ID as the value
+                option.textContent = `${user.firstName} ${user.lastName}`;  // Display full name as option text
+                assigneeSelect.appendChild(option);  // Add the option to the select element
+            });
+        }
+
+        window.onload = populateAssigneeDropdown;
+
+        const form = document.querySelector('.create-button');
+
+        form.addEventListener('click', function() {
+            const title = document.getElementById('taskName').innerText.trim();
+            const description = document.getElementById('taskDescription').value;
+            const priority = document.getElementById('attribute2').value;
+            const assignee = document.getElementById('attribute1').value;
+            const stages = document.getElementById('attribute3').value;
+            const status = document.getElementById('attribute4').value;
+            const storyPoints = document.getElementById('attribute5').value;
+            const type = document.getElementById('attribute7').value;
+
+            const tagElements = document.querySelectorAll('#attribute6 input[type="checkbox"]:checked');
+            const tags = Array.from(tagElements).map(checkbox => checkbox.value);
+
+            const taskName = document.getElementById('taskName').innerText.trim();
+            if (!taskName) {
+                alert('Please enter a task name before creating the task.');
+                return;
+            }
+
+            const id = generateUniqueId();
+            const createdTime = getFormattedDateTime();
+            // Save the task in local storage
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            const productTasks = JSON.parse(localStorage.getItem('product-backlog')) || [];
+            const editTime = [];
+            tasks.push({ title, description, priority, assignee, stages, status, storyPoints, tags, type, id, createdTime, editTime});
+            productTasks.push({ title, description, priority, assignee, stages, status, storyPoints, tags, type, id, createdTime, editTime})
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            localStorage.setItem('product-backlog', JSON.stringify(productTasks));
+
+            // Redirect with task title as query parameter
+            window.location.href = `overview.html?newTask=${encodeURIComponent(title)}`;
+        });
+
+        document.querySelector('.cancel-button').addEventListener('click', function() {
+            window.location.href = 'overview.html';
+        });
+
+        function generateUniqueId() {
+            return 'task-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+        }
+
+        function getFormattedDateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+        function redirectToProfile() {
+            const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+            if (currentMember && currentMember.role) {
+                if (currentMember.role === 'member') {
+                    window.location.href = 'member-profile.html'; // Redirect to member profile
+                } else if (currentMember.role === 'admin') {
+                    window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+                } else {
+                    console.error('Invalid role found for the current member.');
+                }
+            } else {
+                console.error('No current member data found.');
+            }
+        }
+    </script>
+</body>
+</html>

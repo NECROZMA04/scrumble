@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrumble</title>
+    <link rel="icon" href="../images/tab-logo.png" type="png">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+        @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+
+        body {
+            font-family: 'Futura', sans-serif; 
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #6ec6e6;
+            padding-left: 5rem;
+            padding-right: 5rem;
+            padding-top: 1.5rem;
+        }
+
+        body::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        header {
+            font-family: "Bukhari Script", cursive; 
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #6ec6e6;
+            padding-bottom: 1rem;
+            position: relative;
+        }
+
+        nav {
+            display: flex;
+            gap: 5.0rem;
+        }
+
+        nav a {
+            font-family: 'Futura', sans-serif;
+            color: #6f85a6;
+            text-decoration: none;
+            font-size: 23px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #6ec6e6;
+        }
+
+        .user-logo {
+            width: 50px;
+            height: 50px;
+            background-image: url('../images/user-icon.png'); 
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: none;
+            transition: color 0.3s;
+        }
+
+        .user-logo:hover {
+            color: #6ec6e6;
+        }
+
+        hr {
+            height: 4px;
+            background-color: #6ec6e6;
+            border-color: #6ec6e6;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .content {
+            padding: 2rem;
+            text-align: left; 
+        }
+
+        form {
+            margin-top: 2rem;
+        }
+
+        label {
+            font-size: 18px;
+            color: #6f85a6;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"]
+         {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 56px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            box-sizing: border-box;
+        }
+
+        input[type="email"],
+        input[type="password"]{
+            width: 100%;
+            padding: 0.5rem;
+            color: #40556e;
+            font-size: 20px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            box-sizing: border-box;
+            
+        }
+
+        input[type="submit"] {
+            background-color: #6ec6e6;
+            color: #ffffff;
+            padding: 0.75rem 2rem;
+            font-size: 15px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #5ca7c5;
+        }
+
+        .bottom-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            gap: 2rem;
+        }
+
+        .box {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid #a8d4e9;
+            border-radius: 10px;
+        }
+
+        .box h2 {
+            font-size: 30px;
+            color: #40556e;
+            margin-bottom: 1rem;
+            margin-top: 5px;
+        }
+
+        .box p {
+            font-size: 18px;
+            color: #6f85a6;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            gap: 15px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px; 
+            font-size: 16px;
+            cursor: pointer;
+            font-family: 'Futura', sans-serif;
+            transition: background-color 0.3s;
+        }
+
+        .create-button {
+            background-color: #6ec6e6;
+            color: #ffffff;
+            border: none;
+            border-radius: 20px; 
+            font-size: 16px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .create-button:hover {
+            background-color: #d4d4d4;
+        }
+
+        .member-container {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+            gap: 15px;
+        }
+
+        .member-box {
+            background-color: #e8f6fb; 
+            padding: 5px 15px; 
+            border-radius: 20px;
+            border: none;
+            font-size: 18px;
+            color: #508dbc; 
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center; 
+            text-align: left;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            box-sizing: border-box; 
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .member-box:hover {
+            background-color: #dadada; 
+        }
+
+        .no-member-message {
+            align-items: center; /* Center vertically */
+            width: 400px;
+            background-color: #e8f6fb; 
+            color: #508dbc; 
+            margin: auto;
+            border-radius: 10px;
+            text-align: center; 
+            font-weight: bold;
+        }
+
+        form .name {
+            font-size: 58px;
+            color: #0b141f;
+            font-weight: bold;
+        }
+
+        form .email {
+            font-size: 26px;
+            color: #0b141f;
+        }
+
+        .delete-button {
+            padding: 10px 10px;
+            background-color: transparent;
+            color: #508dbc;
+            border: none;
+            border-radius: 15px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-button:hover {
+            background-color: rgb(255, 78, 78);
+            color: white;
+        }
+
+        .logout-button{
+            background-color: #66ccff;
+            color: #fff;
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            margin-left: 150px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover{
+            background-color: #56a6c4;
+        }
+
+        .no-sprint-message {
+            background-color: #e8f6fb;
+            text-align: center;
+            font-size: 18px;
+            color: #508dbc; 
+            border-radius: 10px;
+        }
+
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body onload="checkAuthentication()">
+    <header>
+        <div class="logo">Scrumble</div>
+        <nav>
+            <a href="overview.html">Product Backlog</a>
+            <a href="sprint_board.html">Sprint Board</a>
+        </nav>
+        <div class="logout-button" onclick="logout()">Log out</div>
+        <div class="user-logo" onclick="redirectToProfile()"></div>
+    </header>
+    <hr>
+    <div class="content">
+
+        <form>
+            <label for="name">Name:</label>
+            <span class="name">Admin</span>
+
+            <label for="email">Email:</label>
+            <span class="email">admin@monash.edu</span>
+        </form>
+
+        <!-- Bottom section starts here -->
+        <div class="bottom-section">
+
+            <!-- LEFT: Team Members -->
+            <div class="box">
+                <h2>Team Members</h2>
+                <div class="button-container">
+                    <button class="create-button" onclick="window.location.href='create_account.html'">Create New Account</button>
+                </div>
+                <div class="member-container" id="memberContainer">
+                </div>
+
+            </div>
+
+            <!-- RIGHT: Team Configuration -->
+            <div class="box">
+                <h2>Team Configuration</h2>
+                <div class="team-contribution">
+                    <canvas id="teamContributionChart" width="400" height="200"></canvas>
+                </div>
+            
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            </div>
+        </div>
+        <!-- Bottom section ends here -->
+    </div>
+
+</body>
+
+<script>
+    function checkAuthentication() {
+        // Retrieve currentMember from localStorage
+        const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+        // If currentMember does not exist or memberId is -1, redirect to index.html
+        if (!currentMember || currentMember.memberId === -1) {
+            window.location.href = 'index.html'; // Redirect to login page
+        }
+    }
+
+    function logout() {
+        // Get the currentMember from localStorage
+        let currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+        if (currentMember) {
+            // Update the role and memberId
+            currentMember.role = 'None';
+            currentMember.memberId = -1;
+
+            // Save the updated currentMember back to localStorage
+            localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+            // Redirect to the index.html page (or login page)
+            window.location.href = 'index.html';
+        } else {
+            console.error('No currentMember found in localStorage.');
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Retrieve the users from localStorage or initialize an empty array if there are no users
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        const container = document.getElementById('memberContainer');
+        container.innerHTML = '';  // Clear the container
+
+        // Check if there are no users
+        if (users.length === 0) {
+            const noTaskMessage = document.createElement('p');
+            noTaskMessage.textContent = 'No members are added';
+            noTaskMessage.className = 'no-member-message';
+            container.appendChild(noTaskMessage);
+            return;
+        } else {
+            // Iterate through each user and create a div to display their full name and a delete button
+            users.forEach((user, index) => {
+                const memberElement = document.createElement('div');
+                memberElement.className = 'member-box';
+
+                // Concatenate first and last name
+                const fullName = `ID: #${user.id}  ${user.firstName} ${user.lastName}`;
+                memberElement.textContent = fullName;  // Set the full name as the div content
+                memberElement.onclick = function () {
+                    window.location.href = `member-profile-admin-view.html?memberId=${user.id}`;
+                };
+
+                // Create a delete button
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'delete-button';
+
+                // Stop the event propagation to prevent the redirection
+                // Stop the event propagation to prevent the redirection
+                deleteButton.addEventListener('click', function (event) {
+                    event.stopPropagation(); // Prevent the click event from bubbling up
+
+                    // Display a confirmation dialog
+                    const confirmDelete = confirm('Are you sure you want to delete this member?');
+
+                    // If the user confirms, proceed with deletion
+                    if (confirmDelete) {
+                        // Remove the user from the array
+                        users.splice(index, 1);
+                        // Update localStorage
+                        localStorage.setItem('users', JSON.stringify(users));
+                        // Remove the memberElement from the container
+                        memberElement.remove();
+
+                        // If no users remain, display the no members message
+                        if (users.length === 0) {
+                            container.innerHTML = ''; // Clear the container
+                            const noTaskMessage = document.createElement('p');
+                            noTaskMessage.textContent = 'No members are added';
+                            noTaskMessage.className = 'no-member-message';
+                            container.appendChild(noTaskMessage);
+                        }
+                    } else {
+                        // If the user cancels, do nothing
+                        console.log('User deletion was cancelled');
+                    }
+                });
+
+
+                // Append the delete button to the member element
+                memberElement.appendChild(deleteButton);
+
+                // Append the member div to the container
+                container.appendChild(memberElement);
+            });
+        }
+    });
+
+    function redirectToProfile() {
+        const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+        if (currentMember && currentMember.role) {
+            if (currentMember.role === 'member') {
+                window.location.href = 'member-profile.html'; // Redirect to member profile
+            } else if (currentMember.role === 'admin') {
+                window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+            } else {
+                console.error('Invalid role found for the current member.');
+            }
+        } else {
+            console.error('No current member data found.');
+        }
+    }
+
+    function processLogTimeHistory(users) {
+        const dateLogs = {};
+
+        users.forEach(user => {
+            if (user.logtimeshistory && user.logtimeshistory.length > 0) {
+                user.logtimeshistory.forEach(logtime => {
+                    const logDate = logtime.localDate; // Extract the log date
+                    const timeSpent = parseFloat(logtime.timeSpent) / 60; // Extract time spent (convert to float)
+
+                    console.log('Log Date:', logDate); // Log to see the date format
+                    console.log('Time Spent:', timeSpent);
+
+                    if (dateLogs[logDate]) {
+                        dateLogs[logDate] += timeSpent;
+                    } else {
+                        dateLogs[logDate] = timeSpent;
+                    }
+                });
+            }
+        });
+
+        console.log('Date Logs:', dateLogs); // Log to inspect the resulting sum of hours by date
+        return dateLogs;
+    }
+
+    // Retrieve users and sprints from localStorage
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const sprints = JSON.parse(localStorage.getItem('sprints')) || [];
+
+    // Find the active sprint
+    const activeSprint = sprints.find(sprint => sprint.status === 'Active');
+    const teamContributionChartElement = document.getElementById('teamContributionChart');
+
+    if (activeSprint && teamContributionChartElement) {
+        const startDate = new Date(activeSprint.startDate);
+        const endDate = new Date(activeSprint.endDate);
+
+        // Generate an array of all dates between startDate and endDate
+        const getDatesInRange = (start, end) => {
+            const dates = [];
+            const currentDate = new Date(start);
+            while (currentDate <= end) {
+                dates.push(new Date(currentDate).toISOString().split('T')[0]); // YYYY-MM-DD format
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            return dates;
+        };
+        const sprintDates = getDatesInRange(startDate, endDate);
+
+        // Process log time history to get hours spent
+        const dateLogs = processLogTimeHistory(users);
+
+        // Map the hours spent to the sprint dates
+        const hoursSpent = sprintDates.map(date => dateLogs[date] || 0); // Default to 0 if no hours logged on that date
+
+        // Create the chart
+        const ctx = teamContributionChartElement.getContext('2d');
+        const teamContributionChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: sprintDates, // X-axis labels (sprint dates)
+                datasets: [{
+                    label: 'Time Spent (Hours)',
+                    data: hoursSpent, // Y-axis data (hours spent)
+                    backgroundColor: 'rgba(110, 198, 230, 0.2)',
+                    borderColor: 'rgba(110, 198, 230, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date' // X-axis title
+                        },
+                        grid: {
+                            drawOnChartArea: false, // Disable vertical grid lines
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Time Spent (Hours)' // Y-axis title
+                        },
+                        beginAtZero: true,
+                        grid: {
+                            drawOnChartArea: true, // Enable horizontal grid lines only
+                            drawBorder: true // Show axis borders
+                        }
+                    }
+                }
+            }
+        });
+    } else {
+        if (teamContributionChartElement) {
+            teamContributionChartElement.style.display = 'none';
+        }
+        const teamContributionContainer = document.querySelector('.team-contribution');
+        if (teamContributionContainer) {
+            const noSprintMessage = document.createElement('p');
+            noSprintMessage.textContent = 'No active sprint available';
+            noSprintMessage.className = 'no-sprint-message';
+            teamContributionContainer.appendChild(noSprintMessage);
+        }
+    }
+
+
+</script>
+</html>

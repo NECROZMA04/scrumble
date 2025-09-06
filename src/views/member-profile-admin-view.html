@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrumble</title>
+    <link rel="icon" href="tab-logo.png" type="png">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+        @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+
+        body {
+            font-family: 'Futura', sans-serif;
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #6ec6e6;
+            padding-left: 5rem;
+            padding-right: 5rem;
+            padding-top: 1.5rem;
+        }
+
+        header {
+            font-family: "Bukhari Script", cursive;
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #6ec6e6;
+            padding-bottom: 1rem;
+            position: relative;
+        }
+
+        .content {
+            padding: 2rem;
+            text-align: left; 
+        }
+
+        nav {
+            display: flex;
+            gap: 5.0rem;
+        }
+
+        nav a {
+            font-family: 'Futura', sans-serif;
+            color: #6f85a6;
+            text-decoration: none;
+            font-size: 23px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #6ec6e6;
+        }
+
+        .user-logo {
+            width: 50px;
+            height: 50px;
+            background-image: url('user-icon.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: none;
+            transition: color 0.3s;
+        }
+
+        hr {
+            height: 4px;
+            background-color: #6ec6e6;
+            border-color: #6ec6e6;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .profile-section {
+            background-color: #e0f7fa;
+            padding: 30px;
+            border-radius: 10px;
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .profile-section h2 {
+            margin-bottom: 10px;
+            margin-top: 10px;
+            font-size: 50px;
+            color: #40556e;
+        }
+
+        .profile-section p {
+            margin: 5px 0;
+            font-size: 1.2em;
+            color: #40556e;
+        }
+
+        .profile-section span {
+            font-size: 1.2em;
+            color: #40556e;
+        }
+
+        .graph-section {
+            width: 65%;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .title-box { 
+            padding: 3px 25px;
+            border-radius: 25px;
+            color: #40556e;
+            font-weight: bold;
+            width: fit-content;
+            margin-bottom: 20px;
+            font-size: 2.3em;
+            margin-left: 5px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 350px;
+        }
+
+        button {
+            background-color: #00bcd4;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1em;
+            cursor: pointer;
+            align-self: flex-start;
+            margin-top: 20px;
+            width: fit-content;
+        }
+
+        button:hover {
+            background-color: #008c9e;
+        }
+
+        .logout-button{
+            background-color: #66ccff;
+            color: #fff;
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            margin-left: 150px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover{
+            background-color: #56a6c4;
+        }
+
+        .no-sprint-message {
+            background-color: #e8f6fb;
+            text-align: center;
+            font-size: 18px;
+            color: #508dbc; 
+            border-radius: 10px;
+        }
+
+    </style>
+</head>
+<body onload="checkAuthentication()">
+
+    <!-- Header from Scrumble Page -->
+    <header>
+        <div class="logo">Scrumble</div>
+        <nav>
+            <a href="overview.html">Product Backlog</a>
+            <a href="sprint_board.html">Sprint Board</a>
+        </nav>
+        <div class="logout-button" onclick="logout()">Log out</div>
+        <div class="user-logo" onclick="redirectToProfile()"></div>
+    </header>
+
+    <hr>
+    <div class="content">
+        <div class="container">
+            <div class="profile-section">
+                <h2 id="name">Alex Lee</h2>
+                <p>Email: <span id="email">alexlee033@gmail.com</span></p>
+                <p>Username: <span id="username">alexlee_033</span></p>
+                <p>Password: <span id="password">alexlee033</span></p>
+            </div>
+
+            <!-- Graph Section -->
+            <div class="graph-section">
+                <div class="title-box">Logged Time Span</div>
+                <canvas id="contributionGraph"></canvas>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            </div>
+        </div>
+    </div>
+        
+</body>
+    
+<script>
+    function checkAuthentication() {
+        // Retrieve currentMember from localStorage
+        const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+        // If currentMember does not exist or memberId is -1, redirect to index.html
+        if (!currentMember || currentMember.memberId === -1) {
+            window.location.href = 'index.html'; // Redirect to login page
+        }
+    }
+
+    function logout() {
+        // Get the currentMember from localStorage
+        let currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+        if (currentMember) {
+            // Update the role and memberId
+            currentMember.role = 'None';
+            currentMember.memberId = -1;
+
+            // Save the updated currentMember back to localStorage
+            localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+            // Redirect to the index.html page (or login page)
+            window.location.href = 'index.html';
+        } else {
+            console.error('No currentMember found in localStorage.');
+        }
+    }
+
+    function redirectToProfile() {
+        const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+        if (currentMember && currentMember.role) {
+            if (currentMember.role === 'member') {
+                window.location.href = 'member-profile.html'; // Redirect to member profile
+            } else if (currentMember.role === 'admin') {
+                window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+            } else {
+                console.error('Invalid role found for the current member.');
+            }
+        } else {
+            console.error('No current member data found.');
+        }
+    }
+    // Function to get the memberId from the URL parameter
+    function getMemberIdFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('memberId');  // Get the memberId from the URL parameter
+    }
+
+    const memberId = getMemberIdFromUrl();
+    if (!memberId) {
+        console.error('No memberId found in the URL.');
+    }
+
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(u => u.id === Number(memberId));
+    const sprints = JSON.parse(localStorage.getItem('sprints')) || [];
+
+
+    console.log(user);
+    if (user) {
+        const fullName = `${user.firstName} ${user.lastName}`;
+        document.getElementById('name').textContent = fullName || 'Unknown User';
+        document.getElementById('email').textContent = user.email || 'No Email';
+        document.getElementById('username').textContent = user.username || 'No Email';
+        document.getElementById('password').textContent = user.password || 'No Password';
+    } else {
+        console.error('No user found with the specified memberId.');
+    }
+
+    // Function to find an active sprint and return its startDate and endDate
+    function getActiveSprintDates() {
+        const sprints = JSON.parse(localStorage.getItem('sprints')) || [];
+        const activeSprint = sprints.find(sprint => sprint.status === 'Active');
+        if (activeSprint) {
+            return {
+                startDate: new Date(activeSprint.startDate),  // Convert to Date object
+                endDate: new Date(activeSprint.endDate)       // Convert to Date object
+            };
+        } else {
+            console.error('No active sprint found.');
+            return null;
+        }
+    }
+
+    // Function to fetch logged time data for a specific member based on their memberId
+    function processLogTimeHistoryForUser(user) {
+        const dateLogs = {};
+
+        if (user.logtimeshistory && user.logtimeshistory.length > 0) {
+            user.logtimeshistory.forEach(logtime => {
+                const logDate = logtime.localDate; // Extract the log date
+                const timeSpent = parseFloat(logtime.timeSpent) / 60; // Convert time spent to hours
+
+                if (dateLogs[logDate]) {
+                    dateLogs[logDate] += timeSpent;
+                } else {
+                    dateLogs[logDate] = timeSpent;
+                }
+            });
+        }
+
+        return dateLogs;
+    }
+
+    // Get the memberId from the URL
+    
+    const activeSprint = sprints.find(sprint => sprint.status === 'Active');
+
+    if (activeSprint) {
+        const startDate = new Date(activeSprint.startDate);
+        const endDate = new Date(activeSprint.endDate);
+
+        // Generate an array of all dates between startDate and endDate
+        const getDatesInRange = (start, end) => {
+            const dates = [];
+            const currentDate = new Date(start);
+            while (currentDate <= end) {
+                dates.push(new Date(currentDate).toISOString().split('T')[0]); // YYYY-MM-DD format
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            return dates;
+        };
+        const sprintDates = getDatesInRange(startDate, endDate);
+
+        // Find the specific user based on memberId
+        const user = users.find(u => u.id === Number(memberId));
+
+        if (user) {
+            // Process log time history to get hours spent for the selected user
+            const dateLogs = processLogTimeHistoryForUser(user);
+
+            // Map the hours spent to the sprint dates
+            const hoursSpent = sprintDates.map(date => dateLogs[date] || 0); // Default to 0 if no hours logged on that date
+
+            // Create the chart for the selected user
+            const ctx = document.getElementById('contributionGraph').getContext('2d');
+            const teamContributionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sprintDates, // X-axis labels (sprint dates)
+                    datasets: [{
+                        label: `Time Spent by ${user.firstName} (Hours)`,
+                        data: hoursSpent, // Y-axis data (hours spent)
+                        backgroundColor: 'rgba(110, 198, 230, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date' // X-axis title
+                            },
+                            grid: {
+                                drawOnChartArea: false, // Disable vertical grid lines
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Time Spent (Hours)' // Y-axis title
+                            },
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: true, // Enable horizontal grid lines only
+                                drawBorder: true // Show axis borders
+                            }
+                        }
+                    }
+                }
+            });
+        } else {
+            console.error('No user found with the specified memberId.');
+        }
+    } else {
+        let chart = document.getElementById('contributionGraph'); // Use quotes around the ID
+        console.log(chart);
+        if (chart) {
+            chart.style.display = 'none'; // Hide the chart
+        }
+        const teamContributionContainer = document.querySelector('.graph-section');
+        const noSprintMessage = document.createElement('p');
+        noSprintMessage.textContent = 'No active sprint available';
+        noSprintMessage.className = 'no-sprint-message';
+        teamContributionContainer.appendChild(noSprintMessage);
+    }
+</script>
+
+</html>

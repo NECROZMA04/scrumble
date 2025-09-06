@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprint Dashboard</title>
+    <link rel="icon" href="tab-logo.png" type="png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/futura-std-4');
+        @import url('https://fonts.cdnfonts.com/css/bukhari-script');
+
+        body {
+            font-family: 'Futura', sans-serif; 
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #6ec6e6;
+            padding-left: 5rem;
+            padding-right: 5rem;
+            padding-top: 1.5rem;
+        }
+
+        header {
+            font-family: "Bukhari Script", cursive; 
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #6ec6e6;
+            padding-bottom: 1rem;
+            position: relative;
+        }
+
+        nav {
+            display: flex;
+            gap: 5.0rem;
+        }
+
+        nav a {
+            font-family: 'Futura', sans-serif;
+            color: #6f85a6;
+            text-decoration: none;
+            font-size: 23px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #6ec6e6;
+        }
+
+        .user-logo {
+            width: 50px;
+            height: 50px;
+            background-image: url('user-icon.png'); 
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: none;
+            transition: color 0.3s;
+        }
+
+        .user-logo:hover {
+            color: #6ec6e6;
+        }
+
+        hr {
+            height: 4px;
+            background-color: #6ec6e6;
+            border-color: #6ec6e6;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            margin-bottom: 80px;
+        }
+        .sidebar {
+            background-color: #e8f6fb;
+            padding: 5px 20px;
+            border-radius: 15px;
+            width: 25%;
+        }
+        .sidebar h2 {
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: #0f4272;
+        }
+        .sidebar div {
+            margin: 15px 0;
+        }
+        .sidebar div span {
+            display: block;
+            font-size: 0.9rem;
+            color: #40556e;
+        }
+        .sidebar div p {
+            font-size: 23px;
+            color: #077cb3;
+            margin: 0;
+        }
+        .content {
+            width: 60%;
+        }
+        .content h3 {
+            font-size: 1.8rem;
+            color: #3d3d3d;
+        }
+        .burnout-chart {
+            width: 100%;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .percentage {
+            font-size: 0.9rem;
+            color: #40556e;
+            line-height: 1.7rem;
+            
+        }
+        .percentage span {
+            color: #077cb3;
+        }
+
+        .percentage-row{
+            background-color: #e8f6fb;
+            margin-bottom: 10px;
+            width: fit-content;
+            padding: 2px 19px;
+            border-radius: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .percentage-row:hover{
+            background-color: #def1f8;
+        }
+
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        .legend div {
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            color: #0f4272;
+        }
+        .legend span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: #54C4F7;
+            margin-right: 5px;
+        }
+        .legend .actual {
+            background-color: #3d3d3d;
+        }
+
+        hr {
+            height: 4px;
+            background-color: #6ec6e6;
+            border-color: #6ec6e6;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .sprint-container {
+            background-color: #f9fdff;
+            padding: 20px;
+            border-radius: 20px;
+            margin-top: 30px;
+        }
+
+        .sprint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #e6e6e6;
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sprint-info {
+            display: flex;
+            gap: 2rem; 
+            align-items: center;
+            color: #40556e;
+        }
+
+        .sprint-info h2,
+        .sprint-info p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .task-item {
+            background-color: #e8f6fb;
+            padding: 18px;
+            border-radius: 20px;
+            color: #40556e;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-name {
+            font-weight: bold;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        .task-details {
+            text-align: right;
+            font-size: 15px;
+            color: #40556e;
+            white-space: nowrap;
+        }
+        .logout-button{
+            background-color: #66ccff;
+            color: #fff;
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            margin-left: 150px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover{
+            background-color: #56a6c4;
+        }
+
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body onload="checkAuthentication()">
+    <header>
+        <div class="logo">Scrumble</div>
+        <nav>
+            <a href="overview.html">Product Backlog</a>
+            <a href="sprint_board.html">Sprint Board</a>
+        </nav>
+        <div class="logout-button" onclick="logout()">Log out</div>
+        <div class="user-logo" onclick="redirectToProfile()"></div>
+    </header>
+    <hr>
+
+    <div class="container">
+        <div class="sidebar">
+            <h2 id="sprint-name"></h2>
+            <div>
+                <span>Start Date</span>
+                <p id="start-date"></p>
+            </div>
+            <div>
+                <span>End Date</span>
+                <p id="end-date"></p>
+            </div>
+            <div>
+                <span>Total Story Points</span>
+                <p id="total-story-points"></p>
+            </div>
+            <div>
+                <span>Completed Story Points</span>
+                <p id="completed-story-points"></p>
+            </div>
+            <div>
+                <span>Status</span>
+                <p id="status"></p>
+            </div>
+        </div>
+
+        <div class="content">
+            <h3>Sprint Burndown Chart</h3>
+            <div class="percentage">
+                <div class="percentage-row">Done: <span id="done-percentage"></span></div>
+                <div class="percentage-row">In Progress: <span id="in-progress-percentage"></span></div>
+                <div class="percentage-row">Not Started: <span id="not-started-percentage"></span></div>
+            </div>
+            <div class="burnout-chart">
+                <canvas id="burndownChart" width="400" height="200"></canvas>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            </div>
+        </div>
+    </div>
+
+<script>
+    function checkAuthentication() {
+        // Retrieve currentMember from localStorage
+        const currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+        // If currentMember does not exist or memberId is -1, redirect to index.html
+        if (!currentMember || currentMember.memberId === -1) {
+            window.location.href = 'index.html'; // Redirect to login page
+        }
+    }
+
+    function logout() {
+        // Get the currentMember from localStorage
+        let currentMember = JSON.parse(localStorage.getItem('currentMember'));
+
+        if (currentMember) {
+            // Update the role and memberId
+            currentMember.role = 'None';
+            currentMember.memberId = -1;
+
+            // Save the updated currentMember back to localStorage
+            localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
+            // Redirect to the index.html page (or login page)
+            window.location.href = 'index.html';
+        } else {
+            console.error('No currentMember found in localStorage.');
+        }
+    }
+    function getUrlParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    const sprintId = getUrlParameter('sprintId');
+    // Variables for dynamic content
+    const sprints = JSON.parse(localStorage.getItem('sprints')) || [];
+    const sprintData = sprints.find(sprint => sprint.id === sprintId);
+    const sprint = sprints.find(s => s.id === sprintId);
+
+    // Get the start and end dates of the sprint
+    const startDate = new Date(sprint.startDate);
+    const endDate = new Date(sprint.endDate);
+
+    // Generate an array of all dates between startDate and endDate
+    const getDatesInRange = (start, end) => {
+        const dates = [];
+        const currentDate = new Date(start);
+        while (currentDate <= end) {
+            dates.push(new Date(currentDate).toISOString().split('T')[0]); // YYYY-MM-DD format
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        return dates;
+    };
+    const allDates = getDatesInRange(startDate, endDate);
+
+    // Initialize remainingPointsData with default values (all dates with 0 points)
+    const remainingPointsData = allDates.map(date => ({
+        date: date,
+        remainingPoints: sprint.totalSp || 0 // Initialize with total story points
+    }));
+
+    // Populate the remainingPointsData with the actual data from sprint.remainingPoints
+    sprint.remainingPoints.forEach(entry => {
+        const dataPoint = remainingPointsData.find(dp => dp.date === entry.date);
+        if (dataPoint) {
+            dataPoint.remainingPoints = entry.remainingPoints;
+        }
+    });
+
+    let hasReachedZero = false;
+    // Ensure that if remaining points become zero, they stay zero for the rest of the dates
+    for (let i = 1; i < remainingPointsData.length; i++) {
+        if (remainingPointsData[i - 1].remainingPoints === 0) {
+            hasReachedZero = true;
+        }
+
+        // If previous data point was zero or the current data point has remainingPoints = totalSp (uninitialized), carry forward
+        if (remainingPointsData[i].remainingPoints === sprint.totalSp || hasReachedZero) {
+            remainingPointsData[i].remainingPoints = hasReachedZero ? 0 : remainingPointsData[i - 1].remainingPoints;
+        }
+    }
+
+
+    // Extract dates and remaining points for the chart
+    const chartLabels = remainingPointsData.map(dp => dp.date);
+    const chartData = remainingPointsData.map(dp => dp.remainingPoints);
+
+    const totalDays = allDates.length - 1;
+    const idealVelocityData = allDates.map((date, index) => {
+        const remainingPoints = sprint.totalSp - (sprint.totalSp / totalDays) * index;
+        return remainingPoints;
+    });
+
+    // Get the current date in YYYY-MM-DD format
+    const currentDate = new Date().toISOString().split('T')[0];
+
+    // Find the index of the current date in the chart labels
+    const currentIndex = chartLabels.indexOf(currentDate);
+
+
+    // Create the burndown chart using Chart.js
+    const ctx = document.getElementById('burndownChart').getContext('2d');
+    const burndownChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartLabels, // Dates on the x-axis
+            datasets: [
+                {
+                    label: 'Current Date Pointer',
+                    data: chartData.map((_, index) => (index === currentIndex ? chartData[index] : null)), // Place a dot at the current date only
+                    borderColor: 'red',
+                    backgroundColor: 'red',
+                    pointBackgroundColor: 'red',
+                    pointBorderColor: 'red',
+                    pointRadius: 6, // Size of the red dot
+                    fill: false,
+                    showLine: false // No line, just the point
+                },
+                {
+                    label: 'Remaining Story Points',
+                    data: chartData, // Remaining points on the y-axis
+                    borderColor: '#6ec6e6',
+                    backgroundColor: '#6ec6e6',
+                    fill: false,
+                    tension: 0 // Sharp lines (no curve)
+                },
+                {
+                    label: 'Ideal Velocity',
+                    data: idealVelocityData, // Ideal burndown (linear decrease)
+                    borderColor: 'rgba(255, 99, 132, 0.5)',
+                    backgroundColor: 'transparent',
+                    pointBackgroundColor: 'rgba(255, 99, 132)',
+                    fill: false, // No fill for the ideal line
+                    borderDash: [5, 5], // Dashed line for ideal velocity
+                    tension: 0 // Sharp lines
+                }
+                
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    },
+                    grid: {
+                        drawOnChartArea: false, // Disable vertical grid lines
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Remaining Points'
+                    },
+                    beginAtZero: true,
+                    grid: {
+                        drawOnChartArea: true, // Enable horizontal grid lines only
+                        drawBorder: true // Show axis borders
+                    }
+                }
+            }
+        }
+    });
+
+    if (!sprintData) {
+        alert('Sprint not found');
+        window.location.href = 'sprint_board.html'; // Redirect if sprint is not found
+    }
+
+    const start = new Date(sprintData.startDate);
+    const end = new Date(sprintData.endDate);
+
+    let status = 'Not Started';
+    if (currentDate > end) {
+        status = 'Completed';
+    } else if (currentDate >= start && currentDate <= end) {
+        status = 'Active';
+    }
+
+    document.getElementById("sprint-name").innerText = sprintData.name;
+    document.getElementById("start-date").innerText = sprintData.startDate;
+    document.getElementById("end-date").innerText = sprintData.endDate;
+    document.getElementById("total-story-points").innerText = sprintData.totalSp;
+    document.getElementById("completed-story-points").innerText = sprintData.completedSp;
+    document.getElementById("status").innerText = sprintData.status;
+
+    const totalTasks = sprintData.tasks.length;
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    let doneTasks = 0;
+    let inProgressTasks = 0;
+    let notStartedTasks = 0;
+    sprintData.tasks.forEach(sprintTask => {
+        const task = tasks.find(t => t.id === sprintTask.id); // Find the task in local storage
+        if (task) {
+            if (task.status === 'Completed'){
+                doneTasks += 1
+            }
+            if (task.status === 'In-progress'){
+                inProgressTasks += 1
+            }
+            if (task.status === 'Not-Started'){
+                notStartedTasks += 1
+            }
+        }
+    });
+    
+
+    document.getElementById("done-percentage").innerText = ((doneTasks / totalTasks) * 100).toFixed(2) + '%';
+    document.getElementById("in-progress-percentage").innerText = ((inProgressTasks / totalTasks) * 100).toFixed(2) + '%';
+    document.getElementById("not-started-percentage").innerText = ((notStartedTasks / totalTasks) * 100).toFixed(2) + '%';
+    const sprintTasks = sprintData.tasks; // Get tasks from sprint data
+
+    const burndownChartData = calculateBurndownData(sprintTasks, startDate, endDate);
+
+    function redirectToProfile() {
+        const currentMember = JSON.parse(localStorage.getItem('currentMember')); // Get the stored currentMember
+
+        if (currentMember && currentMember.role) {
+            if (currentMember.role === 'member') {
+                window.location.href = 'member-profile.html'; // Redirect to member profile
+            } else if (currentMember.role === 'admin') {
+                window.location.href = 'Admin_Profile.html'; // Redirect to admin profile
+            } else {
+                console.error('Invalid role found for the current member.');
+            }
+        } else {
+            console.error('No current member data found.');
+        }
+    }
+    
+</script>
+</body>
+</html>
