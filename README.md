@@ -2,6 +2,10 @@
 
 A Scrum-based project management web app built with HTML, CSS, and JavaScript. Designed for product owners and teams to plan sprints, track progress, and manage backlogs with a simple, user-friendly interface tailored for learning and collaboration.
 
+## Live Demo
+
+You can view the live demo of the website [here](https://necrozma04.github.io/scrumble/src/views/index.html).
+
 ## Features
 
 *   **Product Backlog Management:** Create, update, delete, and prioritize user stories.
