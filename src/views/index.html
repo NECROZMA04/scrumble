@@ -74,6 +74,12 @@
             max-width: 300px;
             padding-top: 30px;
             display: flex;
+            flex-direction: column; /* Changed to column */
+        }
+
+        .login-form form {
+            display: flex;
+            flex-direction: column;
         }
 
         .login-form label {
@@ -107,11 +113,27 @@
             transition: background-color 0.3s;
             font-size: 14px;
             margin-top: 7px;
-            
         }
 
         .login-form input[type="submit"]:hover {
             background-color: #527eab;
+        }
+
+        .login-form button {
+            padding: 7px 30px;
+            border-radius: 20px;
+            border: none;
+            background-color: #f3af48; /* A different color for sign up */
+            color: white;
+            cursor: pointer;
+            font-family: 'Futura', sans-serif;
+            transition: background-color 0.3s;
+            font-size: 14px;
+            margin-top: 7px;
+        }
+
+        .login-form button:hover {
+            background-color: #d3884a;
         }
 
         .modal {
@@ -182,6 +204,7 @@
                 <input type="password" id="password" placeholder="Enter your password here" required autocomplete="off">
 
                 <input type="submit" value="Login">
+                <button type="button" id="signupButton">Sign Up</button>
             </form>
         </div>
     </div>
@@ -233,6 +256,10 @@
                 showModal('Username/password is incorrect');
             }
         }
+    });
+
+    document.getElementById('signupButton').addEventListener('click', function() {
+        window.location.href = 'create_account.html';
     });
 
     function showModal(message) {

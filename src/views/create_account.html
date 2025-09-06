@@ -189,11 +189,11 @@
                 <input type="email" id="email" name="email" placeholder="Enter your email address" required autocomplete="off">
 
                 <label for="password">Password:</label>
-                <input type="text" id="password" name="password" placeholder="Enter your password here" required autocomplete="off">
+                <input type="password" id="password" name="password" placeholder="Enter your password here" required autocomplete="off">
                 <button class="generate" type="button" id="generate-password">Generate Password</button>
 
                 <input type="submit" value="Create Account">
-                <button class="bck-button" type="button" onclick="window.history.back()">Back</button>
+                <button class="bck-button" type="button" onclick="window.location.href='index.html'">Back</button>
             </form>
         </div>
     </div>
@@ -246,9 +246,16 @@
         // Store updated users array back in localStorage
         localStorage.setItem('users', JSON.stringify(users));
 
+        // Automatically log in the new user
+        const currentMember = {
+            role: 'member',
+            memberId: newUserId
+        };
+        localStorage.setItem('currentMember', JSON.stringify(currentMember));
+
         // Notify success and redirect
         alert('Successfully created an account!');
-        window.location.href = `member-profile-admin-view.html?memberId=${newUserId}`;
+        window.location.href = 'overview.html';
     });
 
     // Function to generate a secure password
