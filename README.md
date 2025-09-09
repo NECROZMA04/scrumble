@@ -33,7 +33,7 @@ You only need a modern web browser that supports HTML5, CSS3, and JavaScript.
 
 1.  Clone the repo
     ```sh
-    git clone https://github.com/your_username/scrumble.git
+    git clone https://github.com/necrozma04/scrumble.git
     ```
 2.  Navigate to the `src/views` directory.
 3.  Open the `index.html` file in your browser to start the application.
