@@ -6,3 +6,4 @@ archive/
 
 # Ignore macOS specific files
 .DS_Store
+.vercel

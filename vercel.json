@@ -1,0 +1,31 @@
+{
+  "buildCommand": "echo 'No build required for static site'",
+  "outputDirectory": "src",
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/views/index.html"
+    },
+    {
+      "src": "/views/(.*)",
+      "dest": "/views/$1"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "/images/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/js/$1"
+    },
+    {
+      "src": "/css/(.*)",
+      "dest": "/css/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/404.html",
+      "status": 404
+    }
+  ]
+}

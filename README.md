@@ -4,7 +4,7 @@ A Scrum-based project management web app built with HTML, CSS, and JavaScript. D
 
 ## Live Demo
 
-You can view the live demo of the website [here](https://necrozma04.github.io/scrumble/src/views/index.html).
+You can view the live demo of the website [here](https://scrumble-ml5t8em5k-necrozma04s-projects.vercel.app/).
 
 ## Features
 
